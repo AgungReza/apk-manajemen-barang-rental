@@ -1,167 +1,181 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Transaksi</title>
-    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body class="bg-gray-100 py-8 px-4">
-    <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
-        <h1 class="text-2xl font-bold mb-6">Form Transaksi</h1>
-        
-        <!-- Nama Customer -->
-        <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">Nama Customer</label>
-            <div class="flex gap-4">
-                <input 
-                    id="customer_name" 
-                    type="text" 
-                    placeholder="Cari nama customer..." 
-                    class="border border-gray-300 rounded-lg w-full p-2"
-                />
-                <button 
-                    type="button" 
-                    id="add_customer" 
-                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                    + Tambah Customer
-                </button>
-            </div>
-            <div id="customer_suggestions" class="bg-white border rounded shadow mt-2 hidden"></div>
-        </div>
+<?= $this->extend('layout/main') ?>
 
-        <!-- Tanggal Pinjam -->
-        <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal Pinjam</label>
-            <input 
-                id="tanggal_pinjam" 
-                type="date" 
-                class="border border-gray-300 rounded-lg w-full p-2"
-                value="<?= date('Y-m-d') ?>"
-            />
-        </div>
+<?= $this->section('title') ?>
+Form Transaksi
+<?= $this->endSection() ?>
 
-        <!-- Tanggal Kembali -->
-        <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal Kembali</label>
-            <input 
-                id="tanggal_kembali" 
-                type="date" 
-                class="border border-gray-300 rounded-lg w-full p-2"
-            />
-        </div>
+<?= $this->section('content') ?>
+<div class="flex flex-col md:flex-row mt-16">
+    <div class="flex-1 ml-[250px] p-6">
+        <div class="bg-white p-8 rounded shadow-md">
+            <h1 class="text-2xl font-bold mb-6">Form Transaksi</h1>
+            <form action="/transaksi/save" method="post">
+                <?= csrf_field(); ?>
 
-        <!-- Pencarian Barang -->
-        <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">Cari Barang</label>
-            <div class="flex gap-4">
-                <input 
-                    id="barang_search" 
-                    type="text" 
-                    placeholder="Cari barang..." 
-                    class="border border-gray-300 rounded-lg w-full p-2"
-                />
-                <button 
-                    type="button" 
-                    id="add_barang" 
-                    class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-                    + Tambah Barang
-                </button>
-            </div>
-            <div id="barang_suggestions" class="bg-white border rounded shadow mt-2 hidden"></div>
-        </div>
+                <!-- Nama Customer -->
+                <div class="mb-4">
+                    <label for="customer_name" class="block text-sm font-medium text-gray-700">Nama Customer</label>
+                    <input 
+                        id="customer_name" 
+                        name="customer_name"
+                        type="text" 
+                        placeholder="Nama customer..." 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
+                </div>
 
-        <!-- Daftar Barang yang Dipinjam -->
-        <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">Daftar Barang yang Dipinjam</label>
-            <div id="barang_list" class="p-4 border border-gray-300 rounded-lg bg-gray-50">
-                <p class="text-gray-600">Belum ada barang yang ditambahkan.</p>
-            </div>
-        </div>
+                <!-- Tanggal Pinjam -->
+                <div class="mb-4">
+                    <label for="tanggal_pinjam" class="block text-sm font-medium text-gray-700">Tanggal Pinjam</label>
+                    <input 
+                        id="tanggal_pinjam" 
+                        name="tanggal_pinjam"
+                        type="date" 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        value="<?= date('Y-m-d') ?>"
+                    />
+                </div>
 
-        <!-- Tombol Simpan -->
-        <div>
-            <button 
-                type="button" 
-                id="save_transaction" 
-                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">
-                Simpan Transaksi
-            </button>
+                <!-- Tanggal Kembali -->
+                <div class="mb-4">
+                    <label for="tanggal_kembali" class="block text-sm font-medium text-gray-700">Tanggal Kembali</label>
+                    <input 
+                        id="tanggal_kembali" 
+                        name="tanggal_kembali"
+                        type="date" 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
+                </div>
+
+                <!-- Pencarian Barang -->
+                <div class="mb-4">
+                    <label for="barang_search" class="block text-sm font-medium text-gray-700">Cari Barang</label>
+                    <div class="flex gap-4">
+                        <input 
+                            id="barang_search" 
+                            type="text" 
+                            name="keyword"
+                            placeholder="Masukkan nama barang..." 
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
+                        <button 
+                            type="button" 
+                            id="search_button" 
+                            class="inline-flex justify-center rounded-md bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                            Cari Barang
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hasil Pencarian Barang -->
+                <div id="barang_suggestions" class="mt-4 bg-white border border-gray-300 rounded-lg shadow-md p-4 hidden">
+                    <p class="text-gray-500">Hasil pencarian akan muncul di sini...</p>
+                </div>
+
+                <!-- Daftar Barang yang Dipinjam -->
+                <div class="mb-4 mt-6">
+                    <label class="block text-sm font-medium text-gray-700">Daftar Barang yang Dipinjam</label>
+                    <div id="barang_list" class="p-4 border border-gray-300 rounded-lg bg-gray-50">
+                        <p id="barang_placeholder" class="text-gray-600">Belum ada barang yang ditambahkan.</p>
+                    </div>
+                </div>
+
+                <!-- Tombol Simpan -->
+                <div class="flex justify-end">
+                    <button 
+                        type="submit" 
+                        id="save_transaction" 
+                        class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        Simpan Transaksi
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
-    <script>
-        // Nama customer autocomplete
-        $("#customer_name").on("input", function() {
-            const query = $(this).val();
-            if (query.length > 1) {
-                // Ganti URL berikut sesuai endpoint backend Anda
-                $.ajax({
-                    url: '/search_customer', 
-                    method: 'GET',
-                    data: { name: query },
-                    success: function(data) {
-                        const customers = data.customers; // Sesuaikan dengan respons backend
-                        let suggestions = '';
-                        customers.forEach(customer => {
-                            suggestions += `<div class="p-2 hover:bg-gray-100 cursor-pointer" 
-                                onclick="selectCustomer('${customer.id}', '${customer.name}')">
-                                ${customer.name}
-                            </div>`;
-                        });
-                        $("#customer_suggestions").html(suggestions).removeClass('hidden');
-                    }
+<script>
+    const searchButton = document.getElementById('search_button');
+    const barangSearch = document.getElementById('barang_search');
+    const suggestionsContainer = document.getElementById('barang_suggestions');
+    const barangList = document.getElementById('barang_list');
+    const barangPlaceholder = document.getElementById('barang_placeholder');
+
+    searchButton.addEventListener('click', function () {
+        const keyword = barangSearch.value;
+
+        if (keyword.trim() === '') {
+            alert('Masukkan kata kunci untuk mencari barang!');
+            return;
+        }
+
+        fetch('/barang/search', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ keyword: keyword })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Response tidak OK');
+            }
+            return response.json();
+        })
+        .then(data => {
+            suggestionsContainer.innerHTML = '';
+            suggestionsContainer.classList.remove('hidden');
+
+            if (data.length > 0) {
+                data.forEach(item => {
+                    const suggestion = document.createElement('div');
+                    suggestion.classList.add('p-2', 'flex', 'justify-between', 'items-center', 'border-b', 'hover:bg-gray-100', 'cursor-pointer');
+                    suggestion.innerHTML = `
+                        <span>${item.nama_barang}</span>
+                        <button 
+                            type="button" 
+                            class="text-green-500 font-bold"
+                            onclick="addBarang('${item.barang_id}', '${item.nama_barang}')">
+                            + Tambah
+                        </button>
+                    `;
+                    suggestionsContainer.appendChild(suggestion);
                 });
             } else {
-                $("#customer_suggestions").addClass('hidden');
+                suggestionsContainer.innerHTML = '<p class="text-red-500">Barang tidak ditemukan.</p>';
             }
+        })
+        .catch(error => {
+            console.error('Terjadi kesalahan saat pencarian:', error);
+            suggestionsContainer.innerHTML = '<p class="text-red-500">Terjadi kesalahan pada server.</p>';
         });
+    });
 
-        function selectCustomer(id, name) {
-            $("#customer_name").val(name);
-            $("#customer_suggestions").addClass('hidden');
+    function addBarang(id, nama) {
+        barangPlaceholder.classList.add('hidden');
+
+        const newItem = document.createElement('div');
+        newItem.classList.add('p-2', 'flex', 'justify-between', 'items-center', 'border-b');
+        newItem.innerHTML = `
+            <span>${nama}</span>
+            <button class="text-red-500 font-bold" onclick="removeBarang(this)">x</button>
+        `;
+        barangList.appendChild(newItem);
+
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'barang_id[]';
+        hiddenInput.value = id;
+        newItem.appendChild(hiddenInput);
+    }
+
+    function removeBarang(button) {
+        button.parentElement.remove();
+
+        if (barangList.childElementCount === 1) {
+            barangPlaceholder.classList.remove('hidden');
         }
-
-        // Barang autocomplete
-        $("#barang_search").on("input", function() {
-            const query = $(this).val();
-            if (query.length > 1) {
-                // Ganti URL berikut sesuai endpoint backend Anda
-                $.ajax({
-                    url: '/search_barang',
-                    method: 'GET',
-                    data: { name: query },
-                    success: function(data) {
-                        const items = data.items; // Sesuaikan dengan respons backend
-                        let suggestions = '';
-                        items.forEach(item => {
-                            suggestions += `<div class="p-2 hover:bg-gray-100 cursor-pointer" 
-                                onclick="addBarang('${item.id}', '${item.name}')">
-                                ${item.name}
-                            </div>`;
-                        });
-                        $("#barang_suggestions").html(suggestions).removeClass('hidden');
-                    }
-                });
-            } else {
-                $("#barang_suggestions").addClass('hidden');
-            }
-        });
-
-        function addBarang(id, name) {
-            const itemHTML = `<div class="flex justify-between items-center border p-2 mb-2 rounded-lg">
-                <span>${name}</span>
-                <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
-                    onclick="removeBarang(this)">Hapus</button>
-            </div>`;
-            $("#barang_list").append(itemHTML);
-            $("#barang_suggestions").addClass('hidden');
-        }
-
-        function removeBarang(element) {
-            $(element).parent().remove();
-        }
-    </script>
-</body>
-</html>
+    }
+</script>
+<?= $this->endSection() ?>

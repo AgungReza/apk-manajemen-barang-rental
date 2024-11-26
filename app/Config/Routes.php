@@ -35,4 +35,6 @@ $routes->get('/barang/delete/(:any)', 'InputBarangController::delete/$1'); // Pr
 // Rute untuk detail barang
 $routes->get('/barang/detail/(:any)', 'ViewsBarangController::detail/$1'); // Menampilkan detail barang
 
-$routes->get('/transaksi', 'TransaksiController::index');
+// Rute untuk halaman transaksi
+$routes->get('/transaksi', 'TransaksiController::index'); // Halaman Form Transaksi
+$routes->post('/barang/search', 'TransaksiController::searchBarang'); // Proses pencarian barang

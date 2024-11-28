@@ -16,10 +16,9 @@ $routes->get('/logout', 'AuthController::logout'); // Logout
 // Rute untuk dashboard
 $routes->get('/dashboard', 'ViewsBarangController::views'); // Halaman utama dashboard setelah login
 
-
 // Rute untuk halaman barang
 $routes->get('/barang', 'ViewsBarangController::views'); // Menampilkan daftar barang
-$routes->get('/barang/search', 'ViewsBarangController::search');
+$routes->get('/barang/search', 'ViewsBarangController::search'); // Pencarian barang
 
 // Rute untuk penambahan barang
 $routes->get('/barang/add', 'InputBarangController::add'); // Halaman form tambah barang
@@ -38,3 +37,11 @@ $routes->get('/barang/detail/(:any)', 'ViewsBarangController::detail/$1'); // Me
 // Rute untuk halaman transaksi
 $routes->get('/transaksi', 'TransaksiController::index'); // Halaman Form Transaksi
 $routes->post('/barang/search', 'TransaksiController::searchBarang'); // Proses pencarian barang
+$routes->post('/transaksi/save', 'TransaksiController::save'); // Proses penyimpanan transaksi
+
+// Rute untuk pendaftaran customer
+$routes->get('/formcustomer', 'FormCustomerController::index'); // Halaman Form Customer
+$routes->post('/formcustomer/save', 'FormCustomerController::save'); // Proses menyimpan data customer
+$routes->post('/customer/search', 'TransaksiController::searchCustomer'); // Pencarian customer
+$routes->post('/customer/add', 'TransaksiController::addCustomer'); // Proses menambahkan customer baru
+$routes->post('/alat/search', 'TransaksiController::searchAlat');

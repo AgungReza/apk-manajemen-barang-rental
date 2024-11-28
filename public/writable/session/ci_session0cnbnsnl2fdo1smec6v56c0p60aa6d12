@@ -1,0 +1,1 @@
+__ci_last_regenerate|i:1732775572;_ci_previous_url|s:41:"http://localhost:8080/index.php/dashboard";user_id|s:1:"1";first_name|s:5:"Agung";last_name|s:4:"Reza";email|s:16:"user@example.com";isLoggedIn|b:1;errors|a:2:{s:15:"tanggal_kembali";s:38:"The tanggal_kembali field is required.";s:9:"barang_id";s:32:"The barang_id field is required.";}__ci_vars|a:1:{s:6:"errors";s:3:"old";}

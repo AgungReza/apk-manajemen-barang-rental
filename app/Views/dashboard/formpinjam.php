@@ -12,64 +12,57 @@ Form Transaksi
             <form action="/transaksi/save" method="post">
                 <?= csrf_field(); ?>
 
-                <!-- Nama Customer -->
+                <!-- Pencarian Customer -->
                 <div class="mb-4">
-                    <label for="customer_name" class="block text-sm font-medium text-gray-700">Nama Customer</label>
-                    <input 
-                        id="customer_name" 
-                        name="customer_name"
-                        type="text" 
-                        placeholder="Nama customer..." 
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
+                    <label for="customer_search" class="block text-sm font-medium text-gray-700">Nama Customer</label>
+                    <div class="relative">
+                        <input 
+                            id="customer_search" 
+                            name="customer_name" 
+                            type="text" 
+                            placeholder="Cari nama customer..." 
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
+                        <div id="customer_suggestions" class="absolute bg-white border border-gray-300 rounded-lg shadow-md w-full hidden"></div>
+                    </div>
                 </div>
 
-                <!-- Tanggal Pinjam -->
-                <div class="mb-4">
-                    <label for="tanggal_pinjam" class="block text-sm font-medium text-gray-700">Tanggal Pinjam</label>
-                    <input 
-                        id="tanggal_pinjam" 
-                        name="tanggal_pinjam"
-                        type="date" 
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        value="<?= date('Y-m-d') ?>"
-                    />
-                </div>
-
-                <!-- Tanggal Kembali -->
-                <div class="mb-4">
-                    <label for="tanggal_kembali" class="block text-sm font-medium text-gray-700">Tanggal Kembali</label>
-                    <input 
-                        id="tanggal_kembali" 
-                        name="tanggal_kembali"
-                        type="date" 
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
+                <!-- Tanggal Pinjam dan Tanggal Kembali -->
+                <div class="mb-4 grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="tanggal_pinjam" class="block text-sm font-medium text-gray-700">Tanggal Pinjam</label>
+                        <input 
+                            id="tanggal_pinjam" 
+                            name="tanggal_pinjam"
+                            type="date" 
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            value="<?= date('Y-m-d') ?>"
+                        />
+                    </div>
+                    <div>
+                        <label for="tanggal_kembali" class="block text-sm font-medium text-gray-700">Tanggal Kembali</label>
+                        <input 
+                            id="tanggal_kembali" 
+                            name="tanggal_kembali"
+                            type="date" 
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
+                    </div>
                 </div>
 
                 <!-- Pencarian Barang -->
                 <div class="mb-4">
                     <label for="barang_search" class="block text-sm font-medium text-gray-700">Cari Barang</label>
-                    <div class="flex gap-4">
+                    <div class="relative">
                         <input 
                             id="barang_search" 
-                            type="text" 
                             name="keyword"
-                            placeholder="Masukkan nama barang..." 
+                            type="text" 
+                            placeholder="Cari nama barang..." 
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
-                        <button 
-                            type="button" 
-                            id="search_button" 
-                            class="inline-flex justify-center rounded-md bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                            Cari Barang
-                        </button>
+                        <div id="barang_suggestions" class="absolute bg-white border border-gray-300 rounded-lg shadow-md w-full hidden"></div>
                     </div>
-                </div>
-
-                <!-- Hasil Pencarian Barang -->
-                <div id="barang_suggestions" class="mt-4 bg-white border border-gray-300 rounded-lg shadow-md p-4 hidden">
-                    <p class="text-gray-500">Hasil pencarian akan muncul di sini...</p>
                 </div>
 
                 <!-- Daftar Barang yang Dipinjam -->
@@ -80,13 +73,33 @@ Form Transaksi
                     </div>
                 </div>
 
-                <!-- Tombol Simpan -->
-                <div class="flex justify-end">
+                <!-- Catatan -->
+                <div class="mb-4">
+                    <label for="catatan" class="block text-sm font-medium text-gray-700">Catatan</label>
+                    <textarea 
+                        id="catatan" 
+                        name="catatan" 
+                        rows="4" 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" 
+                        placeholder="Tambahkan catatan untuk transaksi ini..."></textarea>
+                </div>
+
+                <!-- Tombol Simpan, Dipesan, dan Diambil -->
+                <div class="flex justify-end gap-4">
                     <button 
                         type="submit" 
-                        id="save_transaction" 
                         class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                         Simpan Transaksi
+                    </button>
+                    <button 
+                        type="button" 
+                        class="inline-flex justify-center rounded-md bg-yellow-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
+                        Dipesan
+                    </button>
+                    <button 
+                        type="button" 
+                        class="inline-flex justify-center rounded-md bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                        Diambil
                     </button>
                 </div>
             </form>
@@ -95,70 +108,93 @@ Form Transaksi
 </div>
 
 <script>
-    const searchButton = document.getElementById('search_button');
+    // Real-time search customer
+    const customerSearch = document.getElementById('customer_search');
+    const customerSuggestions = document.getElementById('customer_suggestions');
+
+    customerSearch.addEventListener('input', function () {
+        const keyword = this.value;
+
+        if (keyword.trim() === '') {
+            customerSuggestions.innerHTML = '';
+            customerSuggestions.classList.add('hidden');
+            return;
+        }
+
+        fetch('/customer/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: JSON.stringify({ keyword: keyword }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            customerSuggestions.innerHTML = '';
+            customerSuggestions.classList.remove('hidden');
+            data.forEach(customer => {
+                const item = document.createElement('div');
+                item.textContent = customer.nama_customer;
+                item.classList.add('p-2', 'hover:bg-gray-100', 'cursor-pointer');
+                item.addEventListener('click', () => {
+                    customerSearch.value = customer.nama_customer;
+                    customerSuggestions.classList.add('hidden');
+                });
+                customerSuggestions.appendChild(item);
+            });
+        });
+    });
+
+    // Real-time search barang
     const barangSearch = document.getElementById('barang_search');
-    const suggestionsContainer = document.getElementById('barang_suggestions');
+    const barangSuggestions = document.getElementById('barang_suggestions');
     const barangList = document.getElementById('barang_list');
     const barangPlaceholder = document.getElementById('barang_placeholder');
 
-    searchButton.addEventListener('click', function () {
-        const keyword = barangSearch.value;
+    barangSearch.addEventListener('input', function () {
+        const keyword = this.value;
 
         if (keyword.trim() === '') {
-            alert('Masukkan kata kunci untuk mencari barang!');
+            barangSuggestions.innerHTML = '';
+            barangSuggestions.classList.add('hidden');
             return;
         }
 
         fetch('/barang/search', {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest',
             },
-            body: JSON.stringify({ keyword: keyword })
+            body: JSON.stringify({ keyword: keyword }),
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Response tidak OK');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            suggestionsContainer.innerHTML = '';
-            suggestionsContainer.classList.remove('hidden');
-
-            if (data.length > 0) {
-                data.forEach(item => {
-                    const suggestion = document.createElement('div');
-                    suggestion.classList.add('p-2', 'flex', 'justify-between', 'items-center', 'border-b', 'hover:bg-gray-100', 'cursor-pointer');
-                    suggestion.innerHTML = `
-                        <span>${item.nama_barang}</span>
-                        <button 
-                            type="button" 
-                            class="text-green-500 font-bold"
-                            onclick="addBarang('${item.barang_id}', '${item.nama_barang}')">
-                            + Tambah
-                        </button>
-                    `;
-                    suggestionsContainer.appendChild(suggestion);
+            barangSuggestions.innerHTML = '';
+            barangSuggestions.classList.remove('hidden');
+            data.forEach(barang => {
+                const item = document.createElement('div');
+                item.classList.add('p-2', 'hover:bg-gray-100', 'cursor-pointer', 'flex', 'justify-between');
+                item.innerHTML = `
+                    <span>ID: ${barang.barang_id} - ${barang.nama_barang}</span>
+                `;
+                item.addEventListener('click', () => {
+                    addBarang(barang.barang_id, barang.nama_barang);
+                    barangSuggestions.classList.add('hidden');
+                    barangSearch.value = ''; // Reset input setelah barang ditambahkan
                 });
-            } else {
-                suggestionsContainer.innerHTML = '<p class="text-red-500">Barang tidak ditemukan.</p>';
-            }
-        })
-        .catch(error => {
-            console.error('Terjadi kesalahan saat pencarian:', error);
-            suggestionsContainer.innerHTML = '<p class="text-red-500">Terjadi kesalahan pada server.</p>';
+                barangSuggestions.appendChild(item);
+            });
         });
     });
 
     function addBarang(id, nama) {
         barangPlaceholder.classList.add('hidden');
-
         const newItem = document.createElement('div');
         newItem.classList.add('p-2', 'flex', 'justify-between', 'items-center', 'border-b');
         newItem.innerHTML = `
-            <span>${nama}</span>
+            <span>ID: ${id} - ${nama}</span>
             <button class="text-red-500 font-bold" onclick="removeBarang(this)">x</button>
         `;
         barangList.appendChild(newItem);

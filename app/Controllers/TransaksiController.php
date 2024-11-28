@@ -12,6 +12,19 @@ class TransaksiController extends BaseController
         return view('dashboard/formpinjam');
     }
 
+    public function searchCustomer()
+    {
+        if ($this->request->isAJAX()) {
+            $keyword = $this->request->getVar('keyword');
+            $customerModel = new \App\Models\CustomerModel();
+
+            $results = $customerModel->like('nama_customer', $keyword)->findAll(10);
+            return $this->response->setJSON($results);
+        }
+
+        return $this->response->setStatusCode(404, 'Request bukan AJAX.');
+    }
+
     public function searchBarang()
     {
         if ($this->request->isAJAX()) {
@@ -46,6 +59,7 @@ class TransaksiController extends BaseController
                 'customer_name' => $this->request->getPost('customer_name'),
                 'tanggal_pinjam' => $this->request->getPost('tanggal_pinjam'),
                 'tanggal_kembali' => $this->request->getPost('tanggal_kembali'),
+                'catatan' => $this->request->getPost('catatan'),
             ]);
 
             // Simpan detail barang

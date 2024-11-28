@@ -66,3 +66,13 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - json (enabled by default - don't turn it off)
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
 - [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+
+
+## Jangan lupa lakukan ini dulu
+1. Install Node.js (https://nodejs.org/en)
+2. Versi PHP minimal 8.2
+3. jalankan "composer install"
+4. jalankan "npm install -D tailwindcss"
+5. jalankan "php spark migrate"
+6. jalankan "php spark serve"
+

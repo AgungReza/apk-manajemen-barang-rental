@@ -24,6 +24,17 @@ Form Transaksi
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                         <div id="customer_suggestions" class="absolute bg-white border border-gray-300 rounded-lg shadow-md w-full hidden"></div>
+                        <div id="no_customer_found" class="hidden mt-2">
+                            <p class="text-sm text-gray-600">
+                                Customer tidak ditemukan, 
+                                <a 
+                                    href="/formcustomer" 
+                                    class="text-blue-600 hover:underline font-medium">
+                                    klik di sini
+                                </a> 
+                                untuk menambah customer baru.
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -84,22 +95,12 @@ Form Transaksi
                         placeholder="Tambahkan catatan untuk transaksi ini..."></textarea>
                 </div>
 
-                <!-- Tombol Simpan, Dipesan, dan Diambil -->
+                <!-- Tombol Simpan -->
                 <div class="flex justify-end gap-4">
                     <button 
                         type="submit" 
                         class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                         Simpan Transaksi
-                    </button>
-                    <button 
-                        type="button" 
-                        class="inline-flex justify-center rounded-md bg-yellow-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
-                        Dipesan
-                    </button>
-                    <button 
-                        type="button" 
-                        class="inline-flex justify-center rounded-md bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                        Diambil
                     </button>
                 </div>
             </form>
@@ -111,6 +112,7 @@ Form Transaksi
     // Real-time search customer
     const customerSearch = document.getElementById('customer_search');
     const customerSuggestions = document.getElementById('customer_suggestions');
+    const noCustomerFound = document.getElementById('no_customer_found');
 
     customerSearch.addEventListener('input', function () {
         const keyword = this.value;
@@ -118,6 +120,7 @@ Form Transaksi
         if (keyword.trim() === '') {
             customerSuggestions.innerHTML = '';
             customerSuggestions.classList.add('hidden');
+            noCustomerFound.classList.add('hidden');
             return;
         }
 
@@ -133,16 +136,24 @@ Form Transaksi
         .then(data => {
             customerSuggestions.innerHTML = '';
             customerSuggestions.classList.remove('hidden');
-            data.forEach(customer => {
-                const item = document.createElement('div');
-                item.textContent = customer.nama_customer;
-                item.classList.add('p-2', 'hover:bg-gray-100', 'cursor-pointer');
-                item.addEventListener('click', () => {
-                    customerSearch.value = customer.nama_customer;
-                    customerSuggestions.classList.add('hidden');
+            noCustomerFound.classList.add('hidden');
+
+            if (data.length > 0) {
+                data.forEach(customer => {
+                    const item = document.createElement('div');
+                    item.textContent = customer.nama_customer;
+                    item.classList.add('p-2', 'hover:bg-gray-100', 'cursor-pointer');
+                    item.addEventListener('click', () => {
+                        customerSearch.value = customer.nama_customer;
+                        customerSuggestions.classList.add('hidden');
+                        noCustomerFound.classList.add('hidden');
+                    });
+                    customerSuggestions.appendChild(item);
                 });
-                customerSuggestions.appendChild(item);
-            });
+            } else {
+                customerSuggestions.classList.add('hidden');
+                noCustomerFound.classList.remove('hidden');
+            }
         });
     });
 

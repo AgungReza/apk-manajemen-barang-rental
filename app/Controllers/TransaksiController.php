@@ -73,4 +73,5 @@ class TransaksiController extends BaseController
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan transaksi.');
         }
     }
+    
 }

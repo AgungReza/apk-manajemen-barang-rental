@@ -45,3 +45,8 @@ $routes->post('/formcustomer/save', 'FormCustomerController::save'); // Proses m
 $routes->post('/customer/search', 'TransaksiController::searchCustomer'); // Pencarian customer
 $routes->post('/customer/add', 'TransaksiController::addCustomer'); // Proses menambahkan customer baru
 $routes->post('/alat/search', 'TransaksiController::searchAlat');
+
+$routes->get('/peminjaman/log', 'PeminjamanController::logPeminjaman'); // Log Peminjaman
+$routes->get('/peminjaman/detail/(:num)', 'PeminjamanController::detail/$1'); // Detail Peminjaman
+$routes->get('/peminjaman/delete/(:num)', 'PeminjamanController::delete/$1'); // Hapus Peminjaman
+

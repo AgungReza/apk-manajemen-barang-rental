@@ -6,27 +6,24 @@ use App\Models\BarangModel;
 
 class InputBarangController extends BaseController
 {
-    protected $barangModel; // Properti model
-    protected $db;          // Properti database
+    protected $barangModel; 
+    protected $db;         
 
     public function __construct()
     {
-        $this->barangModel = new BarangModel(); // Inisialisasi model
-        $this->db = \Config\Database::connect(); // Koneksi ke database
+        $this->barangModel = new BarangModel(); 
+        $this->db = \Config\Database::connect();
     }
 
-    // Halaman Form Input Barang
     public function add()
     {
         return view('dashboard/inputbarang');
     }
 
-    // Proses Simpan Data
     public function save()
     {
         log_message('info', 'Memulai proses penyimpanan data barang.');
 
-        // Validasi Input
         $validation = $this->validate([
             'nama_barang' => 'required',
             'kategori_alat' => 'required',
@@ -38,10 +35,8 @@ class InputBarangController extends BaseController
             return redirect()->back()->withInput()->with('validation', $this->validator);
         }
 
-        // Generate ID Barang Unik
         $barang_id = $this->generateUniqueBarangID();
 
-        // Siapkan Data
         $data = [
             'barang_id' => $barang_id,
             'nama_barang' => $this->request->getPost('nama_barang'),
@@ -57,8 +52,7 @@ class InputBarangController extends BaseController
             'user_id' => session()->get('user_id'),
         ];
 
-        // Simpan Data ke Database
-        if ($this->barangModel->insert($data)) { // Gunakan insert() untuk menambah data baru
+        if ($this->barangModel->insert($data)) { 
             log_message('info', 'Query executed: ' . $this->db->getLastQuery());
             return redirect()->to('/barang')->with('success', 'Data berhasil disimpan!');
         } else {
@@ -67,12 +61,10 @@ class InputBarangController extends BaseController
         }
     }
 
-    // Generate ID Barang Unik
     private function generateUniqueBarangID()
     {
         do {
-            // Generate ID dengan kombinasi huruf dan angka
-            $barang_id = strtoupper(substr(uniqid(), -6)); // ID unik dengan panjang 6 karakter
+            $barang_id = strtoupper(substr(uniqid(), -6)); 
         } while ($this->barangModel->where('barang_id', $barang_id)->countAllResults() > 0);
 
         return $barang_id;

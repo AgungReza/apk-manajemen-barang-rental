@@ -20,7 +20,25 @@ class BarangModel extends Model
         'kondisi',
         'catatan',
         'jumlah_stok',
-        'user_id'
+        'user_id',
+        'created_at',
+        'updated_at',
     ];
     protected $useTimestamps = false;
+
+    /**
+     * Validasi barang_id
+     *
+     * @param array $barangIds
+     * @return bool
+     */
+    public function validateBarangIds(array $barangIds): bool
+    {
+        foreach ($barangIds as $barangId) {
+            if (!$this->find($barangId)) {
+                return false; 
+            }
+        }
+        return true; // Semua barang valid
+    }
 }

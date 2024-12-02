@@ -1,0 +1,87 @@
+<?= $this->extend('layout/main') ?>
+
+<?= $this->section('title') ?>
+Log Peminjaman
+<?= $this->endSection() ?>
+
+<?= $this->section('content') ?>
+<div class="flex flex-col md:flex-row mt-16">
+    <div class="flex-1 ml-[250px] p-6">
+        <div class="bg-white p-8 rounded shadow-md">
+            <h1 class="text-2xl font-bold mb-6">Log Peminjaman</h1>
+
+            <!-- Form Pencarian dan Sortir -->
+            <form action="/peminjaman/log" method="get" class="mb-6">
+                <div class="flex flex-wrap gap-4">
+                    <!-- Input Pencarian -->
+                    <input 
+                        type="text" 
+                        name="search" 
+                        placeholder="Cari nama pengguna atau barang..." 
+                        class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+                        value="<?= esc($search ?? '') ?>"
+                    >
+
+                    <!-- Filter Sortir -->
+                    <div class="flex items-center gap-2">
+                        <label for="tanggal" class="text-sm font-medium">Tanggal:</label>
+                        <input 
+                            type="date" 
+                            id="tanggal" 
+                            name="tanggal" 
+                            class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+                            value="<?= esc($tanggal ?? '') ?>"
+                        >
+                    </div>
+
+                    <!-- Tombol Cari -->
+                    <button 
+                        type="submit" 
+                        class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        Cari
+                    </button>
+                </div>
+            </form>
+
+            <!-- Tabel Data Peminjaman -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="px-4 py-2 border">Nama Peminjam</th>
+                            <th class="px-4 py-2 border">ID Barang</th>
+                            <th class="px-4 py-2 border">Barang yang Dipinjam</th>
+                            <th class="px-4 py-2 border">Tanggal Pinjam</th>
+                            <th class="px-4 py-2 border">Tanggal Kembali</th>
+                            <th class="px-4 py-2 border">Status</th>
+                            <th class="px-4 py-2 border">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($peminjaman) && is_array($peminjaman)): ?>
+                            <?php foreach ($peminjaman as $item): ?>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 border"><?= esc($item['nama_peminjam']) ?></td>
+                                    <td class="px-4 py-2 border"><?= esc($item['barang_id']) ?></td>
+                                    <td class="px-4 py-2 border"><?= esc($item['nama_barang']) ?></td>
+                                    <td class="px-4 py-2 border"><?= esc($item['tanggal_pinjam']) ?></td>
+                                    <td class="px-4 py-2 border"><?= esc($item['tanggal_kembali']) ?></td>
+                                    <td class="px-4 py-2 border"><?= esc($item['status']) ?></td>
+                                    <td class="px-4 py-2 border">
+                                        <a href="/peminjaman/detail/<?= $item['transaksi_id'] ?>" class="text-blue-600 hover:underline">Detail</a> |
+                                        <a href="/peminjaman/delete/<?= $item['transaksi_id'] ?>" class="text-red-600 hover:underline" onclick="return confirm('Apakah Anda yakin ingin menghapus log ini?')">Hapus</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="7" class="text-center px-4 py-2 border">Data peminjaman tidak ditemukan.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<?= $this->endSection() ?>

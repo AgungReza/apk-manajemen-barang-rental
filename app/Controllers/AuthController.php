@@ -8,14 +8,14 @@ class AuthController extends BaseController
 {
     public function register()
     {
-        return view('auth/register'); // Render halaman register
+        return view('auth/register'); 
     }
 
     public function submitRegister()
     {
         $data = $this->request->getPost();
 
-        // Validasi input
+        
         $validation = \Config\Services::validation();
         $validation->setRules([
             'first_name' => 'required',
@@ -29,33 +29,31 @@ class AuthController extends BaseController
             return redirect()->back()->withInput()->with('error', $validation->listErrors());
         }
 
-        // Hash password
+        
         $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
 
-        // Simpan data ke database
+        
         $userModel = new UserModel();
         $userModel->save([
             'first_name' => $data['first_name'],
             'last_name'  => $data['last_name'],
             'email'      => $data['email'],
             'password'   => $hashedPassword,
-            'role'       => 2, // Default role sebagai User
+            'role'       => 2, 
         ]);
 
-        // Redirect ke halaman login dengan pesan sukses
         return redirect()->to('/login')->with('success', 'Akun berhasil didaftarkan!');
     }
 
     public function login()
     {
-        return view('auth/login'); // Render halaman login
+        return view('auth/login'); 
     }
 
     public function submitLogin()
     {
         $data = $this->request->getPost();
 
-        // Validasi input
         $validation = \Config\Services::validation();
         $validation->setRules([
             'email' => 'required|valid_email',
@@ -66,7 +64,6 @@ class AuthController extends BaseController
             return redirect()->back()->withInput()->with('error', $validation->listErrors());
         }
 
-        // Periksa email di database
         $userModel = new UserModel();
         $user = $userModel->where('email', $data['email'])->first();
 
@@ -74,12 +71,11 @@ class AuthController extends BaseController
             return redirect()->back()->with('error', 'Email tidak terdaftar!');
         }
 
-        // Periksa password
+ 
         if (!password_verify($data['password'], $user['password'])) {
             return redirect()->back()->with('error', 'Password salah!');
         }
 
-        // Simpan data user ke session
         session()->set([
             'user_id' => $user['user_id'],
             'first_name' => $user['first_name'],
@@ -88,13 +84,11 @@ class AuthController extends BaseController
             'isLoggedIn' => true,
         ]);
 
-        // Redirect ke dashboard
         return redirect()->to('/dashboard')->with('success', 'Login berhasil!');
     }
 
     public function logout()
     {
-        // Hapus semua data session
         session()->destroy();
         return redirect()->to('/login')->with('success', 'Logout berhasil!');
     }

@@ -1,0 +1,1 @@
+__ci_last_regenerate|i:1732863176;_ci_previous_url|s:41:"http://localhost:8080/index.php/transaksi";user_id|s:1:"1";first_name|s:5:"Agung";last_name|s:4:"Reza";email|s:16:"user@example.com";isLoggedIn|b:1;errors|a:2:{s:14:"type_transaksi";s:37:"The type_transaksi field is required.";s:6:"jumlah";s:29:"The jumlah field is required.";}__ci_vars|a:1:{s:6:"errors";s:3:"old";}

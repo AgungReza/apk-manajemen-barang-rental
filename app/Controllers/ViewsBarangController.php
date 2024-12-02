@@ -13,11 +13,10 @@ class ViewsBarangController extends BaseController
         $this->barangModel = new BarangModel();
     }
 
-    // Menampilkan daftar barang
     public function views()
     {
         if (!session()->get('isLoggedIn')) {
-            return redirect()->to('/login'); // Redirect ke halaman login jika belum login
+            return redirect()->to('/login'); 
         }
 
         $barang = $this->barangModel->findAll();
@@ -25,10 +24,9 @@ class ViewsBarangController extends BaseController
         return view('dashboard/viewsbarang', ['barang' => $barang]);
     }
 
-    // Metode pencarian barang
     public function search()
     {
-        $query = $this->request->getGet('q'); // Mengambil parameter pencarian dari URL
+        $query = $this->request->getGet('q'); 
         $barang = $this->barangModel
             ->like('nama_barang', $query)
             ->orLike('merek', $query)
@@ -37,11 +35,10 @@ class ViewsBarangController extends BaseController
 
         return view('dashboard/viewsbarang', [
             'barang' => $barang,
-            'q' => $query // Mengirimkan kembali query ke view untuk ditampilkan di form
+            'q' => $query 
         ]);
     }
 
-    // Menampilkan detail barang
     public function detail($barangId)
     {
         $barang = $this->barangModel->find($barangId);

@@ -9,11 +9,8 @@ class FormCustomerController extends BaseController
     public function index()
     {
         $customerModel = new CustomerModel();
-
-        // Generate Customer ID yang unik
         $customerId = $this->generateUniqueCustomerId($customerModel);
 
-        // Kirim data ke view
         return view('dashboard/formcustomer', ['customer_id' => $customerId]);
     }
 
@@ -21,7 +18,6 @@ class FormCustomerController extends BaseController
     {
         $customerModel = new CustomerModel();
 
-        // Validasi input
         $validation = $this->validate([
             'nama_customer' => 'required',
             'email' => 'required|valid_email|is_unique[customer.email]',

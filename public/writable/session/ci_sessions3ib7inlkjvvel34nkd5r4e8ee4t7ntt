@@ -1,0 +1,1 @@
+__ci_last_regenerate|i:1732817083;_ci_previous_url|s:38:"http://localhost:8080/index.php/barang";user_id|s:1:"1";first_name|s:5:"Agung";last_name|s:4:"Reza";email|s:16:"user@example.com";isLoggedIn|b:1;errors|a:1:{s:11:"customer_id";s:34:"The customer_id field is required.";}__ci_vars|a:1:{s:6:"errors";s:3:"old";}

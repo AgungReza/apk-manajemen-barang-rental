@@ -4,7 +4,7 @@
     <nav>
         <ul>
             <li class="p-4 hover:bg-gray-500 transition">
-                <a href="/" class="flex items-center text-white">
+                <a href="/home" class="flex items-center text-white">
                     <span class="material-icons mr-2"></span>
                     Home
                 </a>

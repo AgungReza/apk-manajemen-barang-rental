@@ -13,8 +13,9 @@ class TransaksiModel extends Model
         'customer_id',
         'user_id',
         'tanggal_keluar',
+        'jam_keluar',
         'tanggal_kembali',
-        'barang_id',
+        'jam_kembali',
         'status_transaksi',
         'catatan',
     ];

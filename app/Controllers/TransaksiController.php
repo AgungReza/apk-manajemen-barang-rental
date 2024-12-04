@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\BarangModel;
 use App\Models\StatusModel;
 use App\Models\TransaksiModel;
+use App\Models\DetailTransaksiModel;
 
 class TransaksiController extends BaseController
 {
@@ -38,83 +39,106 @@ class TransaksiController extends BaseController
     }
 
     public function save()
-{
-    $validation = \Config\Services::validation();
-    $validation->setRules([
-        'customer_id' => 'required',
-        'tanggal_pinjam' => 'required',
-        'tanggal_kembali' => 'required',
-        'barang_id' => 'required',
-        'status_id' => 'required',
-    ]);
+    {
+        $validation = \Config\Services::validation();
+        $validation->setRules([
+            'customer_id' => 'required',
+            'tanggal_pinjam' => 'required',
+            'tanggal_kembali' => 'required',
+            'barang_id' => 'required',
+            'status_id' => 'required',
+        ]);
 
-    if (!$validation->withRequest($this->request)->run()) {
-        log_message('error', 'Validasi gagal: ' . json_encode($validation->getErrors()));
-        return redirect()->back()->with('errors', $validation->getErrors());
-    }
-
-    $barangIds = $this->request->getPost('barang_id');
-    if (!is_array($barangIds)) {
-        $barangIds = [$barangIds];
-    }
-    log_message('info', "Barang ID diterima: " . json_encode($barangIds));
-
-    $barangModel = new BarangModel();
-    foreach ($barangIds as $barangId) {
-        if (!$barangModel->find($barangId)) {
-            log_message('error', "Barang ID tidak valid: " . $barangId);
-            return redirect()->back()->with('error', 'Barang ID tidak valid.');
+        if (!$validation->withRequest($this->request)->run()) {
+            return redirect()->back()->with('errors', $validation->getErrors());
         }
-        log_message('info', "Barang valid dengan ID: " . $barangId);
-    }
 
-    $userId = session()->get('user_id');
-    if (!$userId) {
-        log_message('error', 'User ID tidak ditemukan di sesi login.');
-        return redirect()->back()->with('error', 'Anda harus login untuk melakukan transaksi.');
-    }
+        $barangIds = $this->request->getPost('barang_id');
+        if (!is_array($barangIds)) {
+            $barangIds = [$barangIds];
+        }
 
-    $transaksiModel = new TransaksiModel();
-    $db = \Config\Database::connect();
-
-    try {
-        $db->transBegin(); 
-
+        $barangModel = new BarangModel();
         foreach ($barangIds as $barangId) {
+            if (!$barangModel->find($barangId)) {
+                return redirect()->back()->with('error', 'Barang ID tidak valid.');
+            }
+        }
+
+        $userId = session()->get('user_id');
+        if (!$userId) {
+            return redirect()->back()->with('error', 'Anda harus login untuk melakukan transaksi.');
+        }
+
+        $transaksiModel = new TransaksiModel();
+        $detailTransaksiModel = new DetailTransaksiModel(); // Gunakan model detail transaksi
+        $db = \Config\Database::connect();
+
+        try {
+            $db->transBegin();
+
+            // Simpan data transaksi utama
             $transaksiId = uniqid('TRX-');
             $transaksiData = [
                 'transaksi_id' => $transaksiId,
                 'customer_id' => $this->request->getPost('customer_id'),
                 'user_id' => $userId,
-                'tanggal_keluar' => $this->request->getPost('tanggal_pinjam'),
-                'tanggal_kembali' => $this->request->getPost('tanggal_kembali'),
-                'barang_id' => $barangId,
+                'tanggal_keluar' => date('Y-m-d', strtotime($this->request->getPost('tanggal_pinjam'))),
+                'jam_keluar' => date('H:i:s', strtotime($this->request->getPost('tanggal_pinjam'))),
+                'tanggal_kembali' => date('Y-m-d', strtotime($this->request->getPost('tanggal_kembali'))),
+                'jam_kembali' => date('H:i:s', strtotime($this->request->getPost('tanggal_kembali'))),
                 'status_transaksi' => $this->request->getPost('status_id'),
                 'catatan' => $this->request->getPost('catatan'),
             ];
+            $transaksiModel->insert($transaksiData);
 
-            log_message('info', "Data transaksi sebelum insert: " . json_encode($transaksiData));
-
-            $builder = $db->table('tb_transaksi');
-            if (!$builder->insert($transaksiData)) {
-                $lastQuery = $db->getLastQuery();
-                $error = $db->error(); 
-                log_message('error', 'Gagal menyimpan data transaksi.');
-                log_message('error', 'Query terakhir: ' . $lastQuery);
-                log_message('error', 'Error Code: ' . $error['code']);
-                log_message('error', 'Error Message: ' . $error['message']);
-                throw new \Exception('Gagal menyimpan transaksi.');
+            // Simpan data detail transaksi
+            foreach ($barangIds as $barangId) {
+                $detailData = [
+                    'transaksi_id' => $transaksiId,
+                    'barang_id' => $barangId,
+                    'jumlah' => 1, // Default jumlah barang (sesuai kebutuhan)
+                    'spesifikasi' => 'N/A', // Default spesifikasi jika tidak diisi
+                ];
+                $detailTransaksiModel->insert($detailData);
             }
+
+            $db->transCommit();
+            return redirect()->to('/transaksi')->with('success', 'Transaksi berhasil disimpan.');
+        } catch (\Exception $e) {
+            $db->transRollback();
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan transaksi.');
+        }
+    }
+
+    public function detail($transaksi_id)
+    {
+        $transaksiModel = new TransaksiModel();
+        $detailTransaksiModel = new DetailTransaksiModel();
+        $customerModel = new \App\Models\CustomerModel();
+
+        // Ambil data transaksi utama
+        $transaksi = $transaksiModel->where('transaksi_id', $transaksi_id)->first();
+
+        if (!$transaksi) {
+            return redirect()->to('/transaksi')->with('error', 'Transaksi tidak ditemukan.');
         }
 
-        $db->transCommit();
-        log_message('info', 'Transaksi berhasil disimpan.');
-        return redirect()->to('/transaksi')->with('success', 'Transaksi berhasil disimpan.');
-    } catch (\Exception $e) {
-        $db->transRollback(); 
-        log_message('error', 'Kesalahan saat menyimpan transaksi: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan transaksi.');
+        // Ambil data detail transaksi
+        $detailBarang = $detailTransaksiModel->where('transaksi_id', $transaksi_id)->findAll();
+
+        // Gabungkan data dengan customer
+        $customer = $customerModel->where('customer_id', $transaksi['customer_id'])->first();
+
+        $detail = [
+            'transaksi' => $transaksi,
+            'detail_barang' => $detailBarang,
+            'nama_customer' => $customer['nama_customer'],
+        ];
+
+        // Kirim data ke view
+        return view('dashboard/detail_peminjaman', ['detail' => $detail]);
     }
-}
+
 
 }

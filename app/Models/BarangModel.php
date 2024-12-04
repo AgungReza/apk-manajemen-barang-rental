@@ -39,6 +39,6 @@ class BarangModel extends Model
                 return false; 
             }
         }
-        return true; // Semua barang valid
+        return true; 
     }
 }

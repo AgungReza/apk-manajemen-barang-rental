@@ -1,14 +1,14 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('title') ?>
-Form Transaksi
+<?= isset($transaksi) ? 'Edit Transaksi' : 'Form Transaksi' ?>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 <div class="flex flex-col md:flex-row mt-16">
     <div class="flex-1 ml-[250px] p-6">
         <div class="bg-white p-8 rounded shadow-md">
-            <h1 class="text-2xl font-bold mb-6">Form Transaksi</h1>
+            <h1 class="text-2xl font-bold mb-6"><?= isset($transaksi) ? 'Edit Transaksi' : 'Form Transaksi' ?></h1>
 
             <!-- Notifikasi -->
             <?php if (session()->getFlashdata('success')): ?>
@@ -33,19 +33,22 @@ Form Transaksi
                 </div>
             <?php endif; ?>
 
-            <form action="/transaksi/save" method="post">
+            <form action="<?= isset($transaksi) ? '/transaksi/update' : '/transaksi/save' ?>" method="post">
                 <?= csrf_field(); ?>
+                <?php if (isset($transaksi)): ?>
+                    <input type="hidden" name="transaksi_id" value="<?= $transaksi['transaksi_id'] ?>">
+                <?php endif; ?>
 
                 <!-- Pencarian Customer -->
                 <div class="mb-4">
                     <label for="customer_search" class="block text-sm font-medium text-gray-700">Nama Customer</label>
                     <div class="relative">
-                        <input id="customer_search" name="customer_name" type="text" placeholder="Cari nama customer..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
-                        <input type="hidden" id="customer_id" name="customer_id">
+                        <input id="customer_search" name="customer_name" value="<?= isset($customer) ? $customer['nama_customer'] : '' ?>" placeholder="Cari nama customer..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                        <input type="hidden" id="customer_id" name="customer_id" value="<?= isset($transaksi) ? $transaksi['customer_id'] : '' ?>">
                         <div id="customer_suggestions" class="absolute bg-white border border-gray-300 rounded-lg shadow-md w-full hidden"></div>
                         <div id="no_customer_found" class="hidden mt-2">
                             <p class="text-sm text-gray-600">
-                                Customer tidak ditemukan, 
+                                Customer tidak ditemukan,
                                 <a href="/formcustomer" class="text-blue-600 hover:underline font-medium">klik di sini</a> untuk menambah customer baru.
                             </p>
                         </div>
@@ -56,11 +59,11 @@ Form Transaksi
                 <div class="mb-4 grid grid-cols-2 gap-4">
                     <div>
                         <label for="tanggal_pinjam" class="block text-sm font-medium text-gray-700">Waktu Pinjam</label>
-                        <input id="tanggal_pinjam" name="tanggal_pinjam" type="datetime-local" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="<?= date('Y-m-d\TH:i') ?>" />
+                        <input id="tanggal_pinjam" name="tanggal_pinjam" type="datetime-local" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="<?= isset($transaksi) ? date('Y-m-d\TH:i', strtotime($transaksi['tanggal_keluar'] . ' ' . $transaksi['jam_keluar'])) : date('Y-m-d\TH:i') ?>" />
                     </div>
                     <div>
                         <label for="tanggal_kembali" class="block text-sm font-medium text-gray-700">Waktu Kembali</label>
-                        <input id="tanggal_kembali" name="tanggal_kembali" type="datetime-local" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                        <input id="tanggal_kembali" name="tanggal_kembali" type="datetime-local" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="<?= isset($transaksi) ? date('Y-m-d\TH:i', strtotime($transaksi['tanggal_kembali'] . ' ' . $transaksi['jam_kembali'])) : '' ?>" />
                     </div>
                 </div>
 
@@ -70,22 +73,19 @@ Form Transaksi
                     <div class="relative">
                         <input id="barang_search" name="keyword" type="text" placeholder="Cari nama barang..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
                         <div id="barang_suggestions" class="absolute bg-white border border-gray-300 rounded-lg shadow-md w-full hidden"></div>
+                        <div id="barang_list" class="p-4 border border-gray-300 rounded-lg bg-gray-50">
+                            <?php if (isset($detailBarang)): ?>
+                                <?php foreach ($detailBarang as $barang): ?>
+                                    <div class="p-2 flex justify-between items-center border-b">
+                                        <span>ID: <?= $barang['barang_id'] ?></span>
+                                        <input type="hidden" name="barang_id[]" value="<?= $barang['barang_id'] ?>">
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <p id="barang_placeholder" class="text-gray-600">Belum ada barang yang ditambahkan.</p>
+                            <?php endif; ?>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Daftar Barang -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">Daftar Barang</label>
-                    <div id="barang_list" class="p-4 border border-gray-300 rounded-lg bg-gray-50">
-                        <p id="barang_placeholder" class="text-gray-600">Belum ada barang yang ditambahkan.</p>
-                    </div>
-                </div>
-
-
-                <!-- Catatan -->
-                <div class="mb-4">
-                    <label for="catatan" class="block text-sm font-medium text-gray-700">Catatan</label>
-                    <textarea id="catatan" name="catatan" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Tambahkan catatan..."></textarea>
                 </div>
 
                 <!-- Status Transaksi -->
@@ -93,22 +93,29 @@ Form Transaksi
                     <label for="status_transaksi" class="block text-sm font-medium text-gray-700">Status Transaksi</label>
                     <select id="status_transaksi" name="status_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                         <?php foreach ($statusList as $status): ?>
-                            <option value="<?= $status['id'] ?>"><?= $status['status_name'] ?></option>
+                            <option value="<?= $status['id'] ?>" <?= isset($transaksi) && $transaksi['status_transaksi'] == $status['id'] ? 'selected' : '' ?>>
+                                <?= $status['status_name'] ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
 
-                <!-- Tombol Simpan -->
+                <!-- Catatan -->
+                <div class="mb-4">
+                    <label for="catatan" class="block text-sm font-medium text-gray-700">Catatan</label>
+                    <textarea id="catatan" name="catatan" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"><?= isset($transaksi) ? $transaksi['catatan'] : '' ?></textarea>
+                </div>
+
+                <!-- Tombol -->
                 <div class="flex justify-end">
-                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Simpan Transaksi</button>
+                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"><?= isset($transaksi) ? 'Simpan Perubahan' : 'Simpan Transaksi' ?></button>
                 </div>
             </form>
         </div>
     </div>
-</div>z
+</div>
 
 <script>
-// Pencarian Customer
 const customerSearch = document.getElementById('customer_search');
 const customerSuggestions = document.getElementById('customer_suggestions');
 const noCustomerFound = document.getElementById('no_customer_found');

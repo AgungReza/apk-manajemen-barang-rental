@@ -69,4 +69,57 @@ class InputBarangController extends BaseController
 
         return $barang_id;
     }
+    public function edit($id)
+    {
+        $barang = $this->barangModel->find($id);
+
+        if (!$barang) {
+            return redirect()->to('/barang')->with('error', 'Barang tidak ditemukan.');
+        }
+
+        return view('dashboard/editbarang', ['barang' => $barang]);
+    }
+    public function update()
+    {
+        $id = $this->request->getPost('barang_id');
+
+        $validation = $this->validate([
+            'nama_barang' => 'required',
+            'kategori_alat' => 'required',
+            'jumlah_stok' => 'required|numeric',
+        ]);
+
+        if (!$validation) {
+            return redirect()->back()->withInput()->with('validation', $this->validator);
+        }
+
+        $data = [
+            'nama_barang' => $this->request->getPost('nama_barang'),
+            'kategori_alat' => $this->request->getPost('kategori_alat'),
+            'merek' => $this->request->getPost('merek'),
+            'spesifikasi' => $this->request->getPost('spesifikasi'),
+            'tahun_pengadaan' => $this->request->getPost('tahun_pengadaan'),
+            'sumber_anggaran' => $this->request->getPost('sumber_anggaran'),
+            'lokasi_penyimpanan' => $this->request->getPost('lokasi_penyimpanan'),
+            'kondisi' => $this->request->getPost('kondisi'),
+            'catatan' => $this->request->getPost('catatan'),
+            'jumlah_stok' => $this->request->getPost('jumlah_stok'),
+        ];
+
+        if ($this->barangModel->update($id, $data)) {
+            return redirect()->to('/barang')->with('success', 'Barang berhasil diperbarui.');
+        } else {
+            return redirect()->back()->withInput()->with('error', 'Gagal memperbarui barang.');
+        }
+    }
+    public function delete($id)
+    {
+        if ($this->barangModel->delete($id)) {
+            return redirect()->to('/barang')->with('success', 'Barang berhasil dihapus.');
+        } else {
+            return redirect()->to('/barang')->with('error', 'Gagal menghapus barang.');
+        }
+    }
+
+
 }

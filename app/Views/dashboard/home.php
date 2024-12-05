@@ -26,9 +26,9 @@ Dashboard Home
             </div>
         </div>
 
-        <!-- Kotak Kanan: Barang yang Akan Kembali -->
+        <!-- Kotak Kanan: Barang Akan Dikembalikan -->
         <div class="flex-1 bg-white p-6 rounded shadow-md">
-            <h1 class="text-xl font-bold mb-4 text-green-600">Barang Akan Kembali</h1>
+            <h1 class="text-xl font-bold mb-4 text-green-600">Barang Akan Dikembalikan</h1>
             <div class="overflow-y-auto max-h-[300px]">
                 <?php if (!empty($returningToday)): ?>
                     <div class="grid grid-cols-1 gap-4">
@@ -40,7 +40,7 @@ Dashboard Home
                         <?php endforeach; ?>
                     </div>
                 <?php else: ?>
-                    <p class="text-gray-500 italic">Tidak ada barang yang kembali hari ini.</p>
+                    <p class="text-gray-500 italic">Tidak ada barang yang akan dikembalikan.</p>
                 <?php endif; ?>
             </div>
         </div>

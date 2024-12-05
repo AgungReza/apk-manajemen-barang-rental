@@ -16,6 +16,35 @@ class TransaksiController extends BaseController
         return view('dashboard/formpinjam', ['statusList' => $statusList]);
     }
 
+    public function show($id)
+    {
+        $transaksiModel = new TransaksiModel();
+        $detailTransaksiModel = new DetailTransaksiModel();
+        $customerModel = new \App\Models\CustomerModel();
+
+        // Ambil data transaksi utama
+        $transaksi = $transaksiModel->where('transaksi_id', $id)->first();
+
+        if (!$transaksi) {
+            return redirect()->to('/transaksi')->with('error', 'Transaksi tidak ditemukan.');
+        }
+
+        // Ambil data detail transaksi
+        $detailBarang = $detailTransaksiModel->where('transaksi_id', $id)->findAll();
+
+        // Gabungkan data dengan customer
+        $customer = $customerModel->where('customer_id', $transaksi['customer_id'])->first();
+
+        $data = [
+            'transaksi' => $transaksi,
+            'detail_barang' => $detailBarang,
+            'customer' => $customer,
+        ];
+
+        return view('dashboard/detail_transaksi', $data);
+    }
+
+
     public function searchCustomer()
     {
         if ($this->request->isAJAX()) {

@@ -31,6 +31,7 @@ Daftar Barang
                         <tr class="bg-gray-100">
                             <th class="px-4 py-2 border">ID Barang</th>
                             <th class="px-4 py-2 border">Nama Barang</th>
+                            <th class="px-4 py-2 border">Jumlah</th>
                             <th class="px-4 py-2 border">Aksi</th>
                         </tr>
                     </thead>
@@ -40,6 +41,7 @@ Daftar Barang
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-4 py-2 border"><?= $item['barang_id'] ?></td>
                                     <td class="px-4 py-2 border"><?= $item['nama_barang'] ?></td>
+                                    <td class="px-4 py-2 border"><?= $item['jumlah_stok'] ?></td>
                                     <td class="px-4 py-2 border">
                                         <a href="/barang/edit/<?= $item['barang_id'] ?>" class="text-blue-600 hover:underline">Edit</a> |
                                         <a href="/barang/delete/<?= $item['barang_id'] ?>" class="text-red-600 hover:underline" onclick="return confirm('Apakah Anda yakin ingin menghapus barang ini?')">Hapus</a>
@@ -48,7 +50,7 @@ Daftar Barang
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="3" class="text-center px-4 py-2 border">Data barang tidak ditemukan.</td>
+                                <td colspan="4" class="text-center px-4 py-2 border">Data barang tidak ditemukan.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

@@ -38,6 +38,8 @@ $routes->get('/transaksi/detail/(:segment)', 'TransaksiController::detail/$1'); 
 $routes->post('/barang/search', 'TransaksiController::searchBarang'); // Pencarian barang
 $routes->post('/customer/search', 'TransaksiController::searchCustomer'); // Pencarian customer
 
+
+
 // Rute untuk peminjaman
 $routes->get('/peminjaman/log', 'LogPeminjamanController::logPeminjaman'); // Log peminjaman
 $routes->get('/peminjaman/detail/(:any)', 'LogPeminjamanController::detail/$1'); // Detail peminjaman
@@ -55,4 +57,3 @@ $routes->get('/listcustomer', 'FormCustomerController::list'); // Route untuk me
 $routes->get('/editcustomer/(:segment)', 'FormCustomerController::edit/$1'); // Route untuk form edit customer
 $routes->post('/editcustomer/(:segment)', 'FormCustomerController::update/$1'); // Route untuk update data customer
 $routes->get('/deletecustomer/(:segment)', 'FormCustomerController::delete/$1'); // Route untuk menghapus customer
-$routes->get('/customer/search', 'FormCustomerController::search');

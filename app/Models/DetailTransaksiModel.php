@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class DetailTransaksiModel extends Model
 {
-    protected $table = 'detail_transaksi';
+    protected $table = 'tb_detail_transaksi';
     protected $primaryKey = 'id';
     protected $allowedFields = ['transaksi_id', 'barang_id', 'jumlah', 'spesifikasi'];
 

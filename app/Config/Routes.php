@@ -51,9 +51,11 @@ $routes->get('/barang/edit/(:any)', 'InputBarangController::edit/$1');
 $routes->post('/barang/update', 'InputBarangController::update');
 $routes->get('/barang/delete/(:any)', 'InputBarangController::delete/$1');
 
-$routes->get('/formcustomer', 'FormCustomerController::index'); // Halaman Form Customer
-$routes->post('/formcustomer/save', 'FormCustomerController::save'); // Proses menyimpan data customer
-$routes->get('/listcustomer', 'FormCustomerController::list'); // Route untuk menampilkan daftar customer
-$routes->get('/editcustomer/(:segment)', 'FormCustomerController::edit/$1'); // Route untuk form edit customer
-$routes->post('/editcustomer/(:segment)', 'FormCustomerController::update/$1'); // Route untuk update data customer
-$routes->get('/deletecustomer/(:segment)', 'FormCustomerController::delete/$1'); // Route untuk menghapus customer
+$routes->get('/formcustomer', 'FormCustomerController::index');
+$routes->post('/formcustomer/save', 'FormCustomerController::save');
+$routes->get('/listcustomer', 'FormCustomerController::list');
+$routes->get('/customer/search', 'FormCustomerController::search');
+$routes->get('/editcustomer/(:segment)', 'FormCustomerController::edit/$1');
+$routes->post('/updatecustomer/(:segment)', 'FormCustomerController::update/$1');
+$routes->get('/deletecustomer/(:segment)', 'FormCustomerController::delete/$1');
+

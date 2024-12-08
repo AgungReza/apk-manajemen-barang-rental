@@ -45,6 +45,11 @@ Edit Barang
                     <label for="jumlah_stok" class="block text-sm font-medium text-gray-700">Jumlah Stok</label>
                     <input type="number" id="jumlah_stok" name="jumlah_stok" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="<?= $barang['jumlah_stok'] ?>" required>
                 </div>
+                <!-- Tahun Pengadaan -->
+                <div class="mb-4">
+                    <label for="jumlah_stok" class="block text-sm font-medium text-gray-700">Tahun Pengadaan</label>
+                    <input type="number" id="tahun_pengadaan" name="tahun_pengadaan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="<?= $barang['tahun_pengadaan'] ?>" required>
+                </div>
 
                 <!-- Submit -->
                 <div class="flex justify-end">

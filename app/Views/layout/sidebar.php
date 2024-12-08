@@ -54,7 +54,7 @@
                         </a>
                     </li>
                     <li class="p-4 hover:bg-gray-600 transition">
-                        <a href="/customer/list" class="flex items-center text-white">
+                        <a href="/listcustomer" class="flex items-center text-white">
                             <span class="material-icons mr-2"></span>
                             Daftar Customer
                         </a>

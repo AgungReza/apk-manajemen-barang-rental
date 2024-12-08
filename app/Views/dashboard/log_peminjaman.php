@@ -25,7 +25,7 @@ Log Peminjaman
                 <table class="min-w-full bg-white border border-gray-300">
                     <thead>
                         <tr class="bg-gray-100">
-                            <th class="px-4 py-2 border">ID Customer</th>
+                            <th class="px-4 py-2 border">ID Transaksi</th>
                             <th class="px-4 py-2 border">Nama Customer</th>
                             <th class="px-4 py-2 border">Tanggal Pinjam</th>
                             <th class="px-4 py-2 border">Tanggal Kembali</th>
@@ -37,13 +37,13 @@ Log Peminjaman
                         <?php if (!empty($peminjaman)): ?>
                             <?php foreach ($peminjaman as $item): ?>
                                 <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 border"><?= esc($item['customer_id']) ?></td>
+                                    <td class="px-4 py-2 border"><?= esc($item['transaksi_id']) ?></td>
                                     <td class="px-4 py-2 border"><?= esc($item['nama_customer']) ?></td>
                                     <td class="px-4 py-2 border"><?= esc($item['tanggal_pinjam']) ?></td>
                                     <td class="px-4 py-2 border"><?= esc($item['tanggal_kembali']) ?></td>
                                     <td class="px-4 py-2 border"><?= esc($item['status_transaksi']) ?></td>
                                     <td class="px-4 py-2 border">
-                                        <a href="/peminjaman/detail/<?= $item['transaksi_id'] ?>" class="text-blue-600 hover:underline">Detail</a>
+                                        <a href="/transaksi/form/<?= $item['transaksi_id'] ?>" class="text-blue-600 hover:underline">Detail</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

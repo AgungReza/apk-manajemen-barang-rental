@@ -1,6 +1,28 @@
 <aside
     class="bg-gray-600 w-[250px] min-h-screen pt-[60px] fixed text-white"
 >
+<style>
+    .logo-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 24px; /* Memberikan jarak bawah */
+    }
+
+    .logo-image {
+        height: 150px; /* Tinggi logo */
+        width: auto; /* Lebar otomatis untuk menjaga proporsi */
+        object-fit: contain; /* Memastikan gambar tidak terpotong */
+    }
+</style>
+
+<!-- Logo -->
+<div class="logo-container">
+    <img src="/img/logo.png" alt="Logo" class="logo-image">
+</div>
+
+
+
     <nav>
         <ul>
             <li class="p-4 hover:bg-gray-500 transition">

@@ -2,16 +2,21 @@
 
 namespace App\Controllers;
 
-use App\Models\PeminjamanModel;
+use App\Models\BarangModel;
+use App\Models\CustomerModel;
+use App\Models\TransaksiModel;
 
 class FrontController extends BaseController
 {
     public function index()
     {
-        $peminjamanModel = new PeminjamanModel();
+        // Inisialisasi model
+        $barangModel = new BarangModel();
+        $customerModel = new CustomerModel();
+        $transaksiModel = new TransaksiModel();
 
         // Barang bookingan hari ini: Status "Dipesan"
-        $bookingToday = $peminjamanModel->select('
+        $bookingToday = $transaksiModel->select('
                 tb_transaksi.transaksi_id,
                 customer.nama_customer,
                 tb_transaksi.tanggal_keluar,
@@ -22,8 +27,8 @@ class FrontController extends BaseController
             ->where('tb_transaksi.status_transaksi', 2) // Status "Dipesan"
             ->findAll();
 
-        // Barang yang akan dikembalikan: Status "Diambil" dan dalam range 7 jam sebelum masa pinjam habis
-        $returningToday = $peminjamanModel->select('
+        // Barang yang akan dikembalikan
+        $returningToday = $transaksiModel->select('
                 tb_transaksi.transaksi_id,
                 customer.nama_customer,
                 tb_transaksi.tanggal_kembali,
@@ -35,9 +40,18 @@ class FrontController extends BaseController
             ->where('TIMESTAMPDIFF(HOUR, NOW(), CONCAT(tb_transaksi.tanggal_kembali, " ", tb_transaksi.jam_kembali)) <=', 7) // Kurang dari 7 jam
             ->findAll();
 
+        // Hitung jumlah total
+        $totalBarang = $barangModel->countAllResults();
+        $totalCustomer = $customerModel->countAllResults();
+        $totalTransaksi = $transaksiModel->countAllResults();
+
+        // Kirim data ke view
         return view('dashboard/home', [
             'bookingToday' => $bookingToday,
             'returningToday' => $returningToday,
+            'totalBarang' => $totalBarang,
+            'totalCustomer' => $totalCustomer,
+            'totalTransaksi' => $totalTransaksi,
         ]);
     }
 }

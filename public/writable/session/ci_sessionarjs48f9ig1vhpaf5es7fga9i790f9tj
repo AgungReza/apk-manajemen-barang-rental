@@ -1,1 +1,0 @@
-__ci_last_regenerate|i:1733274877;_ci_previous_url|s:41:"http://localhost:8080/index.php/transaksi";errors|a:3:{s:11:"customer_id";s:34:"The customer_id field is required.";s:15:"tanggal_kembali";s:38:"The tanggal_kembali field is required.";s:9:"barang_id";s:32:"The barang_id field is required.";}__ci_vars|a:1:{s:6:"errors";s:3:"old";}

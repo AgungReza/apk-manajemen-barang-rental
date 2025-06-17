@@ -37,7 +37,7 @@ class FrontController extends BaseController
             ->join('customer', 'customer.customer_id = tb_transaksi.customer_id')
             ->where('tb_transaksi.status_transaksi', 1) // Status "Diambil"
             ->where('DATE(tb_transaksi.tanggal_kembali)', date('Y-m-d')) // Tanggal kembali hari ini
-            ->where('TIMESTAMPDIFF(HOUR, NOW(), CONCAT(tb_transaksi.tanggal_kembali, " ", tb_transaksi.jam_kembali)) <=', 7) // Kurang dari 7 jam
+            ->where('TIMESTAMPDIFF(HOUR, NOW(), CONCAT(tb_transaksi.tanggal_kembali, " ", tb_transaksi.jam_kembali)) <=', 3) // Kurang dari 7 jam
             ->findAll();
 
         // Hitung jumlah total

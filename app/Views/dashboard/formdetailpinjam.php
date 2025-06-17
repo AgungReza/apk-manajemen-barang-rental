@@ -1,7 +1,7 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('title') ?>
-Form Transaksi
+Detail Transaksi
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>

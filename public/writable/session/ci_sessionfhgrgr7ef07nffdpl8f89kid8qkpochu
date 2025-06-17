@@ -1,1 +1,0 @@
-__ci_last_regenerate|i:1732770465;errors|a:3:{s:13:"customer_name";s:36:"The customer_name field is required.";s:14:"tanggal_pinjam";s:37:"The tanggal_pinjam field is required.";s:15:"tanggal_kembali";s:38:"The tanggal_kembali field is required.";}__ci_vars|a:1:{s:6:"errors";s:3:"new";}

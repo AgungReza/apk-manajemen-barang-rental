@@ -23,22 +23,6 @@ class BarangModel extends Model
         'user_id',
         'created_at',
         'updated_at',
+        'status'
     ];
-    protected $useTimestamps = false;
-
-    /**
-     * Validasi barang_id
-     *
-     * @param array $barangIds
-     * @return bool
-     */
-    public function validateBarangIds(array $barangIds): bool
-    {
-        foreach ($barangIds as $barangId) {
-            if (!$this->find($barangId)) {
-                return false; 
-            }
-        }
-        return true; 
-    }
 }

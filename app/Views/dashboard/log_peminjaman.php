@@ -18,6 +18,9 @@ Log Peminjaman
                         <input type="date" id="tanggal" name="tanggal" class="rounded-md border-gray-300 shadow-sm p-2" value="<?= esc($tanggal ?? '') ?>">
                     </div>
                     <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md">Cari</button>
+                    <a href="/peminjaman/export" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        Cetak Excel
+                    </a>
                 </div>
             </form>
 

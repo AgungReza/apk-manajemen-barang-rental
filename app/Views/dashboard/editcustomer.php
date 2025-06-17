@@ -24,9 +24,9 @@ Edit Customer
                     <input type="email" id="email" name="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="<?= isset($customer['email']) ? esc($customer['email']) : '' ?>" required>
                 </div>
 
-                <!-- NIK/NIS/NIM -->
+                <!-- NIS -->
                 <div class="mb-4">
-                    <label for="nik_nis_nim" class="block text-sm font-medium text-gray-700">NIK/NIS/NIM</label>
+                    <label for="nik_nis_nim" class="block text-sm font-medium text-gray-700">Nomor Induk Siswa</label>
                     <input type="text" id="nik_nis_nim" name="nik_nis_nim" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="<?= isset($customer['nik_nis_nim']) ? esc($customer['nik_nis_nim']) : '' ?>" required>
                 </div>
 

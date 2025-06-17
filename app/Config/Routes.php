@@ -58,4 +58,9 @@ $routes->get('/customer/search', 'FormCustomerController::search');
 $routes->get('/editcustomer/(:segment)', 'FormCustomerController::edit/$1');
 $routes->post('/updatecustomer/(:segment)', 'FormCustomerController::update/$1');
 $routes->get('/deletecustomer/(:segment)', 'FormCustomerController::delete/$1');
+$routes->get('/barang/export', 'ViewsBarangController::exportExcel');
+$routes->get('/peminjaman/export', 'LogPeminjamanController::export');
+
+
+$routes->post('/transaksi/save', 'TransaksiController::save');
 

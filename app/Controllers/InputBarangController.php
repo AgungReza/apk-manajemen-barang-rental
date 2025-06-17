@@ -49,6 +49,7 @@ class InputBarangController extends BaseController
             'kondisi' => $this->request->getPost('kondisi'),
             'catatan' => $this->request->getPost('catatan'),
             'jumlah_stok' => $this->request->getPost('jumlah_stok'),
+            'status' => 1, // Status default ke 1 (Ready)
             'user_id' => session()->get('user_id'),
         ];
 
@@ -69,6 +70,7 @@ class InputBarangController extends BaseController
 
         return $barang_id;
     }
+
     public function edit($id)
     {
         $barang = $this->barangModel->find($id);
@@ -79,6 +81,7 @@ class InputBarangController extends BaseController
 
         return view('dashboard/editbarang', ['barang' => $barang]);
     }
+
     public function update()
     {
         $id = $this->request->getPost('barang_id');
@@ -104,6 +107,7 @@ class InputBarangController extends BaseController
             'kondisi' => $this->request->getPost('kondisi'),
             'catatan' => $this->request->getPost('catatan'),
             'jumlah_stok' => $this->request->getPost('jumlah_stok'),
+            'status' => $this->request->getPost('status') ?? 1, // Status dapat diperbarui, default tetap 1 jika tidak diinput
         ];
 
         if ($this->barangModel->update($id, $data)) {
@@ -112,6 +116,7 @@ class InputBarangController extends BaseController
             return redirect()->back()->withInput()->with('error', 'Gagal memperbarui barang.');
         }
     }
+
     public function delete($id)
     {
         if ($this->barangModel->delete($id)) {
@@ -120,6 +125,4 @@ class InputBarangController extends BaseController
             return redirect()->to('/barang')->with('error', 'Gagal menghapus barang.');
         }
     }
-
-
 }

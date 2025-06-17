@@ -15,7 +15,7 @@ class AuthController extends BaseController
     {
         $data = $this->request->getPost();
 
-        
+        // Validasi input
         $validation = \Config\Services::validation();
         $validation->setRules([
             'first_name' => 'required',
@@ -29,20 +29,28 @@ class AuthController extends BaseController
             return redirect()->back()->withInput()->with('error', $validation->listErrors());
         }
 
-        
+        // Hash password
         $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
 
-        
+        // Generate user_id (2 huruf + 2 angka)
         $userModel = new UserModel();
-        $userModel->save([
+        do {
+            $randomUserId = strtoupper(chr(random_int(65, 90)) . chr(random_int(65, 90))) . random_int(10, 99);
+        } while ($userModel->where('user_id', $randomUserId)->first());
+
+        // Simpan data user
+        $insertResult = $userModel->insert([
+            'user_id'    => $randomUserId,
             'first_name' => $data['first_name'],
             'last_name'  => $data['last_name'],
             'email'      => $data['email'],
             'password'   => $hashedPassword,
-            'role'       => 2, 
+            'role'       => 2, // Default role
         ]);
 
-        return redirect()->to('/login')->with('success', 'Akun berhasil didaftarkan!');
+        if (!$insertResult) {
+            return redirect()->to('/login')->with('success', 'Akun berhasil didaftarkan!');
+        }
     }
 
     public function login()
@@ -54,6 +62,7 @@ class AuthController extends BaseController
     {
         $data = $this->request->getPost();
 
+        // Validasi input
         $validation = \Config\Services::validation();
         $validation->setRules([
             'email' => 'required|valid_email',
@@ -71,16 +80,17 @@ class AuthController extends BaseController
             return redirect()->back()->with('error', 'Email tidak terdaftar!');
         }
 
- 
+        // Verifikasi password
         if (!password_verify($data['password'], $user['password'])) {
             return redirect()->back()->with('error', 'Password salah!');
         }
 
+        // Set session
         session()->set([
-            'user_id' => $user['user_id'],
+            'user_id'    => $user['user_id'],
             'first_name' => $user['first_name'],
-            'last_name' => $user['last_name'],
-            'email' => $user['email'],
+            'last_name'  => $user['last_name'],
+            'email'      => $user['email'],
             'isLoggedIn' => true,
         ]);
 

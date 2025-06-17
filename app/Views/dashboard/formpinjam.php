@@ -100,12 +100,14 @@ Form Transaksi
 
                 <!-- Tombol Simpan -->
                 <div class="flex justify-end">
-                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Simpan Transaksi</button>
+                    <button type="button" id="submit_button" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                        Simpan Transaksi
+                    </button>
                 </div>
             </form>
         </div>
     </div>
-</div>z
+</div>
 
 <script>
 // Pencarian Customer
@@ -163,6 +165,7 @@ const barangSuggestions = document.getElementById('barang_suggestions');
 const barangList = document.getElementById('barang_list');
 const barangPlaceholder = document.getElementById('barang_placeholder');
 
+// Pencarian Barang
 barangSearch.addEventListener('input', function () {
     const keyword = this.value.trim();
 
@@ -186,16 +189,42 @@ barangSearch.addEventListener('input', function () {
             barangSuggestions.classList.remove('hidden');
 
             if (data.length > 0) {
-                data.forEach(barang => {
-                    const item = document.createElement('div');
-                    item.classList.add('p-2', 'hover:bg-gray-100', 'cursor-pointer', 'flex', 'justify-between');
-                    item.innerHTML = `<span>ID: ${barang.barang_id} - ${barang.nama_barang}</span>`;
-                    item.addEventListener('click', () => {
-                        addBarang(barang.barang_id, barang.nama_barang);
-                        barangSuggestions.classList.add('hidden');
-                        barangSearch.value = ''; // Reset input setelah barang ditambahkan
+                const groupedData = groupByName(data);
+
+                Object.keys(groupedData).forEach(namaBarang => {
+                    const group = groupedData[namaBarang];
+
+                    // Parent Element
+                    const parentItem = document.createElement('div');
+                    parentItem.classList.add('p-2', 'border-b', 'bg-gray-100', 'font-bold');
+                    parentItem.textContent = namaBarang;
+
+                    // Append to suggestions
+                    barangSuggestions.appendChild(parentItem);
+
+                    // Child Elements (IDs)
+                    group.forEach(barang => {
+                        const childItem = document.createElement('div');
+                        childItem.classList.add('p-2', 'ml-4', 'flex', 'justify-between', 'items-center');
+
+                        const statusColor = barang.status_color === 'green' ? 'text-green-600' : 'text-red-600';
+
+                        childItem.innerHTML = `
+                            <div>
+                                <span class="text-sm ${statusColor}">ID: ${barang.barang_id}</span>
+                                <span class="text-xs ${statusColor}">(${barang.status_text})</span>
+                            </div>
+                            <button 
+                                type="button" 
+                                class="text-blue-600 hover:underline font-medium" 
+                                onclick="addBarang('${barang.barang_id}', '${namaBarang}', ${barang.status_color === 'green'})"
+                                ${barang.status_color === 'red' ? 'disabled' : ''}>
+                                Pilih
+                            </button>
+                        `;
+
+                        barangSuggestions.appendChild(childItem);
                     });
-                    barangSuggestions.appendChild(item);
                 });
             } else {
                 barangSuggestions.innerHTML = `<div class="p-2 text-gray-500">Barang tidak ditemukan.</div>`;
@@ -206,7 +235,23 @@ barangSearch.addEventListener('input', function () {
         });
 });
 
-function addBarang(id, nama) {
+// Fungsi untuk mengelompokkan data berdasarkan nama_barang
+function groupByName(data) {
+    return data.reduce((groups, barang) => {
+        if (!groups[barang.nama_barang]) {
+            groups[barang.nama_barang] = [];
+        }
+        groups[barang.nama_barang].push(barang);
+        return groups;
+    }, {});
+}
+// Fungsi untuk menambahkan barang ke daftar
+function addBarang(id, nama, isAvailable) {
+    if (!isAvailable) {
+        alert('Barang tidak tersedia dan tidak dapat dipilih.');
+        return;
+    }
+
     // Cek apakah barang sudah ada di daftar
     const existingItems = barangList.querySelectorAll('input[name="barang_id[]"]');
     for (let item of existingItems) {
@@ -225,16 +270,41 @@ function addBarang(id, nama) {
         <button class="text-red-500 font-bold" onclick="removeBarang(this)">x</button>
         <input type="hidden" name="barang_id[]" value="${id}">
     `;
-
     barangList.appendChild(newItem);
 }
 
+// Fungsi untuk menghapus barang dari daftar
 function removeBarang(button) {
     button.parentElement.remove();
 
+    // Jika tidak ada barang lagi di daftar, tampilkan placeholder
     if (barangList.childElementCount === 1) {
         barangPlaceholder.classList.remove('hidden');
     }
 }
+document.getElementById('submit_button').addEventListener('click', function (e) {
+    e.preventDefault();
+
+    // Validasi input form
+    const form = document.querySelector('form');
+    const customerId = document.getElementById('customer_id').value;
+    const barangList = document.querySelectorAll('input[name="barang_id[]"]');
+
+    if (!customerId || barangList.length === 0) {
+        alert('Pastikan customer dan barang sudah dipilih.');
+        return;
+    }
+
+    // Popup konfirmasi cetak PDF
+    if (confirm('Apakah Anda ingin menyimpan transaksi dan mencetak Surat Jalan?')) {
+        // Simpan transaksi dan cetak PDF
+        form.action = '/transaksi/save?cetak=1'; // Tambahkan parameter cetak
+        form.submit();
+    } else {
+        // Simpan transaksi saja
+        form.action = '/transaksi/save';
+        form.submit();
+    }
+});
 </script>
 <?= $this->endSection() ?>

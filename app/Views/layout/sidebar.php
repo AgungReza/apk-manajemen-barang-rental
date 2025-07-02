@@ -107,6 +107,7 @@
             top: 60px; /* Mulai di bawah navbar */
             left: 0;
             z-index: 900;
+            transition: transform 0.3s ease;
         }
         
         .logo-container {
@@ -212,6 +213,7 @@
         .dropdown-icon {
             transition: transform 0.3s ease;
             font-size: 20px;
+            margin-left: auto;
         }
         
         .nav-item:hover .dropdown-icon {
@@ -297,153 +299,28 @@
             padding: 30px;
             background: #f5f7fa;
             min-height: calc(100vh - 60px); /* Tinggi navbar */
+            transition: margin-left 0.3s ease;
         }
         
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        
-        .dashboard-title {
-            font-size: 28px;
-            font-weight: 600;
-            color: #1e293b;
-        }
-        
-        .dashboard-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-card {
+        /* Menu Toggle Button */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 99;
             background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e2e8f0;
-        }
-        
-        .stat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .stat-title {
-            font-size: 16px;
-            color: #64748b;
-            font-weight: 500;
-        }
-        
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-        
-        .stat-value {
-            font-size: 32px;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 5px;
-        }
-        
-        .stat-change {
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .change-up {
-            color: #10b981;
-        }
-        
-        .change-down {
-            color: #ef4444;
-        }
-        
-        .activity-card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e2e8f0;
-            margin-bottom: 30px;
-        }
-        
-        .activity-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .activity-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1e293b;
-        }
-        
-        .activity-item {
-            display: flex;
-            align-items: flex-start;
-            padding: 15px 0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .activity-icon {
+            border: none;
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
-            flex-shrink: 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
         }
         
-        .activity-content {
-            flex: 1;
-        }
-        
-        .activity-text {
-            font-weight: 500;
-            margin-bottom: 3px;
-        }
-        
-        .activity-desc {
-            font-size: 14px;
-            color: #64748b;
-        }
-        
-        .activity-time {
-            text-align: right;
-            min-width: 80px;
-        }
-        
-        .time-text {
-            font-size: 14px;
-            color: #64748b;
-        }
-        
-        .time-badge {
-            display: inline-block;
-            font-size: 12px;
-            padding: 3px 8px;
-            border-radius: 20px;
-            margin-top: 5px;
-        }
-        
+        /* Responsive Styles */
         @media (max-width: 992px) {
             .sidebar {
                 width: 250px;
@@ -457,7 +334,6 @@
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
-                transition: transform 0.3s ease;
                 width: 250px;
             }
             
@@ -467,37 +343,17 @@
             
             .main-content {
                 margin-left: 0;
-                padding: 10px;
+                padding: 20px;
             }
             
             .menu-toggle {
-                display: block;
-                position: fixed;
-                top: 15px;
-                left: 15px;
-                z-index: 99;
-                background: white;
-                border: none;
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
                 display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="menu-toggle" id="menuToggle">
-            <span class="material-icons">menu</span>
-        </div>
-        <div class="navbar-title">Admin Dashboard</div>
-        
-    </nav>
+    
 
     <!-- Main Container -->
     <div class="main-container">
@@ -505,16 +361,15 @@
         <aside class="sidebar" id="sidebar">
             <!-- Logo -->
             <div class="logo-container">
-                <img src="\img\Logo proyek pemrograman.png" alt="Logo" class="logo-image">
+                <img src="/img/Logo proyek pemrograman.png" alt="Logo" class="logo-image">
             </div>
 
-            
 
             <!-- Navigation Links -->
             <div class="nav-links">
                 <!-- Home -->
                 <div class="nav-item">
-                    <a href="/home" class="nav-link active">
+                    <a href="<?= site_url('home') ?>" class="nav-link <?= current_url() == site_url('home') ? 'active' : '' ?>">
                         <span class="material-icons nav-icon">home</span>
                         Home
                     </a>
@@ -522,7 +377,7 @@
                 
                 <!-- Barang -->
                 <div class="nav-item">
-                    <a href="/barang" class="nav-link">
+                    <a href="<?= site_url('barang') ?>" class="nav-link <?= current_url() == site_url('barang') ? 'active' : '' ?>">
                         <span class="material-icons nav-icon">inventory_2</span>
                         Barang
                     </a>
@@ -530,17 +385,20 @@
                 
                 <!-- Peminjaman with Dropdown -->
                 <div class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="#" class="nav-link <?= 
+                        current_url() == site_url('transaksi') || 
+                        current_url() == site_url('peminjaman/log') ? 'active' : '' 
+                    ?>">
                         <span class="material-icons nav-icon">shopping_cart</span>
                         Peminjaman
-                        <span class="material-icons dropdown-icon ml-auto">expand_more</span>
+                        <span class="material-icons dropdown-icon">expand_more</span>
                     </a>
                     <div class="dropdown-menu">
-                        <a href="/transaksi" class="dropdown-item">
+                        <a href="<?= site_url('transaksi') ?>" class="dropdown-item">
                             <span class="material-icons dropdown-icon-small">assignment</span>
                             Form Peminjaman
                         </a>
-                        <a href="/peminjaman/log" class="dropdown-item">
+                        <a href="<?= site_url('peminjaman/log') ?>" class="dropdown-item">
                             <span class="material-icons dropdown-icon-small">history</span>
                             Log Peminjaman
                         </a>
@@ -549,17 +407,20 @@
                 
                 <!-- Customers with Dropdown -->
                 <div class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="#" class="nav-link <?= 
+                        current_url() == site_url('formcustomer') || 
+                        current_url() == site_url('listcustomer') ? 'active' : '' 
+                    ?>">
                         <span class="material-icons nav-icon">groups</span>
                         Customers
-                        <span class="material-icons dropdown-icon ml-auto">expand_more</span>
+                        <span class="material-icons dropdown-icon">expand_more</span>
                     </a>
                     <div class="dropdown-menu">
-                        <a href="/formcustomer" class="dropdown-item">
+                        <a href="<?= site_url('formcustomer') ?>" class="dropdown-item">
                             <span class="material-icons dropdown-icon-small">person_add</span>
                             Form Customer
                         </a>
-                        <a href="/listcustomer" class="dropdown-item">
+                        <a href="<?= site_url('listcustomer') ?>" class="dropdown-item">
                             <span class="material-icons dropdown-icon-small">list_alt</span>
                             Daftar Customer
                         </a>
@@ -569,52 +430,62 @@
             
             <!-- Logout Button -->
             <div class="logout-section">
-                <button class="logout-btn">
+                <a href="<?= site_url('logout') ?>" class="logout-btn" id="logoutBtn">
                     <span class="material-icons logout-icon">logout</span>
                     LogOut
-                </button>
+                </a>
             </div>
         </aside>
 
         <!-- Main Content -->
-        
+        <main class="main-content" id="mainContent">
+            <?= $this->renderSection('content') ?>
+        </main>
     </div>
 
     <script>
         // Menu toggle for mobile
         const menuToggle = document.getElementById('menuToggle');
         const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
         
         menuToggle.addEventListener('click', function() {
             sidebar.classList.toggle('active');
         });
         
-        // Add active class to clicked nav items
+        // Add active class to current page
         document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                // Remove active class from all links
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                
-                // Add active class to clicked link
-                this.classList.add('active');
-            });
-        });
-        
-        // Handle dropdown links
-        document.querySelectorAll('.dropdown-item').forEach(item => {
-            item.addEventListener('click', function() {
-                // Set parent link as active
-                const parentLink = this.closest('.nav-item').querySelector('.nav-link');
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                parentLink.classList.add('active');
-            });
+            if (link.href === window.location.href) {
+                link.classList.add('active');
+            }
         });
         
         // Handle logout button
-        document.querySelector('.logout-btn').addEventListener('click', function() {
-            if(confirm('Apakah Anda yakin ingin keluar?')) {
-                alert('Anda telah logout');
-                // window.location.href = '/logout';
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            if(!confirm('Apakah Anda yakin ingin keluar?')) {
+                e.preventDefault();
+            }
+        });
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const isClickInsideSidebar = sidebar.contains(event.target);
+            const isClickInsideToggle = menuToggle.contains(event.target);
+            
+            if (window.innerWidth <= 768 && 
+                !isClickInsideSidebar && 
+                !isClickInsideToggle && 
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+        
+        // Auto-close dropdown when clicking elsewhere
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.nav-item')) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.style.display = 'none';
+                });
             }
         });
     </script>

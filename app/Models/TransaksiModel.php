@@ -20,3 +20,17 @@ class TransaksiModel extends Model
         'catatan',
     ];
 }
+
+class PeminjamanModel extends Model
+{
+    protected $table = 'peminjaman';
+    protected $primaryKey = 'transaksi_id';
+    protected $allowedFields = [
+        'customer_id', 
+        'tanggal_pinjam', 
+        'tanggal_kembali', 
+        'status_transaksi'
+    ];
+
+    // ... metode lainnya ...
+}

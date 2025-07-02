@@ -8,7 +8,7 @@
 <body class="bg-gray-100 font-sans leading-normal tracking-normal">
     <div class="flex flex-col md:flex-row">
     <?= view('layout/sidebar') ?>
-        <div class="flex-1 p-6 bg-gray-100">
+        <div >
             <?= view('layout/navbar') ?>
             <?= $this->renderSection('content') ?>
             <?= view('layout/footer') ?>

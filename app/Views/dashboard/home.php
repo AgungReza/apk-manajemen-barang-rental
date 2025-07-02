@@ -188,7 +188,7 @@ Dashboard Home
     }
 </style>
 
-<main class="flex-1 ml-[250px] mt-[50px] p-6 bg-gray-50">
+<main >
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <!-- Left Column (3/4 width) -->
         <div class="lg:col-span-3">
@@ -205,7 +205,7 @@ Dashboard Home
                 <div class="stat-card">
                     <div class="stat-title">Peminjaman</div>
                     <div class="stat-title">Aktif</div>
-                    <div class="stat-number">78</div>
+                    <div class="stat-number"><?= isset($peminjamanAktif) ? esc($peminjamanAktif) : '0' ?></div>
                 </div>
                 
                 <!-- Total Customers -->
@@ -220,47 +220,78 @@ Dashboard Home
             <div class="activity-card">
                 <h2 class="activity-header">Aktivitas Terbaru</h2>
                 
-                <!-- Activity 1 -->
-                <div class="activity-item">
-                    <div class="activity-icon icon-blue">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-                        </svg>
+                <?php if (!empty($recentActivities)) : ?>
+                    <?php foreach ($recentActivities as $activity) : ?>
+                        <div class="activity-item">
+                            <!-- Icon berdasarkan jenis aktivitas -->
+                            <?php if ($activity['type'] === 'peminjaman') : ?>
+                                <div class="activity-icon icon-blue">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            <?php elseif ($activity['type'] === 'barang') : ?>
+                                <div class="activity-icon icon-green">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            <?php elseif ($activity['type'] === 'customer') : ?>
+                                <div class="activity-icon icon-purple">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <div class="activity-content">
+                                <div class="activity-title"><?= esc($activity['title']) ?></div>
+                                <div class="activity-desc"><?= esc($activity['description']) ?></div>
+                                <div class="activity-time"><?= date('d M Y H:i', strtotime($activity['created_at'])) ?></div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <!-- Default activities if no data -->
+                    <div class="activity-item">
+                        <div class="activity-icon icon-blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Peminjaman baru</div>
+                            <div class="activity-desc">Customer: Budi Santoso - Barang: Proyektor Epson</div>
+                            <div class="activity-time">3 jam yang lalu</div>
+                        </div>
                     </div>
-                    <div class="activity-content">
-                        <div class="activity-title">Peminjaman baru</div>
-                        <div class="activity-desc">Customer: John Doe meminjam Barang #B-1248</div>
-                        <div class="activity-time">10:42 AM</div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon icon-green">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Barang baru ditambahkan</div>
+                            <div class="activity-desc">Kamera Canon EOS 90D telah ditambahkan ke inventaris</div>
+                            <div class="activity-time">Kemarin, 14:30</div>
+                        </div>
                     </div>
-                </div>
-                
-                <!-- Activity 2 -->
-                <div class="activity-item">
-                    <div class="activity-icon icon-green">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                        </svg>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon icon-purple">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Customer baru terdaftar</div>
+                            <div class="activity-desc"> Jaya Abadi telah terdaftar sebagai customer baru</div>
+                            <div class="activity-time">2 hari yang lalu</div>
+                        </div>
                     </div>
-                    <div class="activity-content">
-                        <div class="activity-title">Barang baru ditambahkan</div>
-                        <div class="activity-desc">Barang #B-4891: Mesin Bor 12V</div>
-                        <div class="activity-time">9:15 AM</div>
-                    </div>
-                </div>
-                
-                <!-- Activity 3 -->
-                <div class="activity-item">
-                    <div class="activity-icon icon-purple">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">Customer baru terdaftar</div>
-                        <div class="activity-desc">Sarah Johnson (#C-7821)</div>
-                        <div class="activity-time">Kemarin</div>
-                    </div>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
         

@@ -23,8 +23,7 @@ class FormCustomerController extends BaseController
             'email' => 'required|valid_email|is_unique[customer.email]',
             'nik_nis_nim' => 'required',
             'alamat' => 'required',
-            'kelas' => 'required',
-            'jurusan' => 'required',
+            
         ]);
 
         if (!$validation) {
@@ -37,8 +36,7 @@ class FormCustomerController extends BaseController
             'email' => $this->request->getVar('email'),
             'nik_nis_nim' => $this->request->getVar('nik_nis_nim'),
             'alamat' => $this->request->getVar('alamat'),
-            'kelas' => $this->request->getVar('kelas'),
-            'jurusan' => $this->request->getVar('jurusan'),
+            
         ]);
 
         return redirect()->to('/formcustomer')->with('success', 'Customer berhasil didaftarkan!');

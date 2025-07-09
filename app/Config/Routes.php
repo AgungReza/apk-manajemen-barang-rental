@@ -64,3 +64,5 @@ $routes->get('/peminjaman/export', 'LogPeminjamanController::export');
 
 $routes->post('/transaksi/save', 'TransaksiController::save');
 
+$routes->get('/jadwal', 'JadwalController::jadwal');
+

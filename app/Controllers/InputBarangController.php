@@ -17,8 +17,10 @@ class InputBarangController extends BaseController
 
     public function add()
     {
-        return view('dashboard/inputbarang');
+        $barang_id = $this->generateUniqueBarangID();
+        return view('dashboard/inputbarang', ['barang_id' => $barang_id]);
     }
+
 
     public function save()
     {
@@ -26,8 +28,7 @@ class InputBarangController extends BaseController
 
         $validation = $this->validate([
             'nama_barang' => 'required',
-            'kategori_alat' => 'required',
-            'jumlah_stok' => 'required|numeric',
+            'harga' => 'required|numeric',
         ]);
 
         if (!$validation) {
@@ -35,23 +36,20 @@ class InputBarangController extends BaseController
             return redirect()->back()->withInput()->with('validation', $this->validator);
         }
 
-        $barang_id = $this->generateUniqueBarangID();
+        $barang_id = $this->request->getPost('barang_id');
 
         $data = [
             'barang_id' => $barang_id,
             'nama_barang' => $this->request->getPost('nama_barang'),
-            'kategori_alat' => $this->request->getPost('kategori_alat'),
             'merek' => $this->request->getPost('merek'),
             'spesifikasi' => $this->request->getPost('spesifikasi'),
-            'tahun_pengadaan' => $this->request->getPost('tahun_pengadaan'),
-            'sumber_anggaran' => $this->request->getPost('sumber_anggaran'),
-            'lokasi_penyimpanan' => $this->request->getPost('lokasi_penyimpanan'),
+            'harga' => $this->request->getPost('harga'),
             'kondisi' => $this->request->getPost('kondisi'),
             'catatan' => $this->request->getPost('catatan'),
-            'jumlah_stok' => $this->request->getPost('jumlah_stok'),
-            'status' => 1, // Status default ke 1 (Ready)
+            'status' => 1,
             'user_id' => session()->get('user_id'),
         ];
+
 
         if ($this->barangModel->insert($data)) { 
             log_message('info', 'Query executed: ' . $this->db->getLastQuery());
@@ -88,27 +86,24 @@ class InputBarangController extends BaseController
 
         $validation = $this->validate([
             'nama_barang' => 'required',
-            'kategori_alat' => 'required',
-            'jumlah_stok' => 'required|numeric',
+            'harga' => 'required|numeric',
         ]);
+
 
         if (!$validation) {
             return redirect()->back()->withInput()->with('validation', $this->validator);
         }
 
-        $data = [
-            'nama_barang' => $this->request->getPost('nama_barang'),
-            'kategori_alat' => $this->request->getPost('kategori_alat'),
-            'merek' => $this->request->getPost('merek'),
-            'spesifikasi' => $this->request->getPost('spesifikasi'),
-            'tahun_pengadaan' => $this->request->getPost('tahun_pengadaan'),
-            'sumber_anggaran' => $this->request->getPost('sumber_anggaran'),
-            'lokasi_penyimpanan' => $this->request->getPost('lokasi_penyimpanan'),
-            'kondisi' => $this->request->getPost('kondisi'),
-            'catatan' => $this->request->getPost('catatan'),
-            'jumlah_stok' => $this->request->getPost('jumlah_stok'),
-            'status' => $this->request->getPost('status') ?? 1, // Status dapat diperbarui, default tetap 1 jika tidak diinput
-        ];
+            $data = [
+                'nama_barang' => $this->request->getPost('nama_barang'),
+                'merek' => $this->request->getPost('merek'),
+                'spesifikasi' => $this->request->getPost('spesifikasi'),
+                'harga' => $this->request->getPost('harga'),
+                'kondisi' => $this->request->getPost('kondisi'),
+                'catatan' => $this->request->getPost('catatan'),
+                'status' => $this->request->getPost('status') ?? 1,
+            ];
+
 
         if ($this->barangModel->update($id, $data)) {
             return redirect()->to('/barang')->with('success', 'Barang berhasil diperbarui.');

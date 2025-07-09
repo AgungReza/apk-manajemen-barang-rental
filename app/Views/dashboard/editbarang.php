@@ -16,39 +16,38 @@ Edit Barang
                 <!-- Nama Barang -->
                 <div class="mb-4">
                     <label for="nama_barang" class="block text-sm font-medium text-gray-700">Nama Barang</label>
-                    <input type="text" id="nama_barang" name="nama_barang" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="<?= $barang['nama_barang'] ?>" required>
-                </div>
-
-                <!-- Jenis Barang -->
-                <div class="mb-4">
-                    <label for="kategori_alat" class="block text-sm font-medium text-gray-700">Jenis Barang</label>
-                    <select id="kategori_alat" name="kategori_alat" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
-                        <option value="habis_pakai" <?= $barang['kategori_alat'] == 'habis_pakai' ? 'selected' : '' ?>>Habis Pakai</option>
-                        <option value="tidak_habis_pakai" <?= $barang['kategori_alat'] == 'tidak_habis_pakai' ? 'selected' : '' ?>>Tidak Habis Pakai</option>
-                    </select>
+                    <input type="text" id="nama_barang" name="nama_barang" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="<?= esc($barang['nama_barang']) ?>" required>
                 </div>
 
                 <!-- Merk -->
                 <div class="mb-4">
                     <label for="merek" class="block text-sm font-medium text-gray-700">Merk</label>
-                    <input type="text" id="merek" name="merek" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="<?= $barang['merek'] ?>">
+                    <input type="text" id="merek" name="merek" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="<?= esc($barang['merek']) ?>">
                 </div>
 
                 <!-- Spesifikasi -->
                 <div class="mb-4">
                     <label for="spesifikasi" class="block text-sm font-medium text-gray-700">Spesifikasi</label>
-                    <textarea id="spesifikasi" name="spesifikasi" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"><?= $barang['spesifikasi'] ?></textarea>
+                    <textarea id="spesifikasi" name="spesifikasi" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"><?= esc($barang['spesifikasi']) ?></textarea>
                 </div>
 
-                <!-- Jumlah Stok -->
+                <!-- Harga -->
                 <div class="mb-4">
-                    <label for="jumlah_stok" class="block text-sm font-medium text-gray-700">Jumlah Stok</label>
-                    <input type="number" id="jumlah_stok" name="jumlah_stok" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="<?= $barang['jumlah_stok'] ?>" required>
+                    <label for="harga" class="block text-sm font-medium text-gray-700">Harga (Rp)</label>
+                    <input type="number" id="harga" name="harga" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="<?= esc($barang['harga']) ?>" required>
+                    <p class="text-xs text-gray-500 mt-1">Masukkan angka tanpa titik atau koma, contoh: 100000</p>
                 </div>
-                <!-- Tahun Pengadaan -->
+
+                <!-- Kondisi -->
                 <div class="mb-4">
-                    <label for="jumlah_stok" class="block text-sm font-medium text-gray-700">Tahun Pengadaan</label>
-                    <input type="number" id="tahun_pengadaan" name="tahun_pengadaan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="<?= $barang['tahun_pengadaan'] ?>" required>
+                    <label for="kondisi" class="block text-sm font-medium text-gray-700">Kondisi</label>
+                    <input type="text" id="kondisi" name="kondisi" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="<?= esc($barang['kondisi']) ?>">
+                </div>
+
+                <!-- Catatan -->
+                <div class="mb-4">
+                    <label for="catatan" class="block text-sm font-medium text-gray-700">Catatan</label>
+                    <textarea id="catatan" name="catatan" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"><?= esc($barang['catatan']) ?></textarea>
                 </div>
 
                 <!-- Submit -->

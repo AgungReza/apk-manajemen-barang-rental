@@ -78,6 +78,9 @@ require FCPATH . '../app/Config/Paths.php';
 
 $paths = new Config\Paths();
 
+// FIX: Definisikan SUPPORTPATH agar tidak error
+defined('SUPPORTPATH') || define('SUPPORTPATH', realpath(__DIR__ . '/tests/_support') . DIRECTORY_SEPARATOR);
+
 // LOAD THE FRAMEWORK BOOTSTRAP FILE
 require $paths->systemDirectory . '/Boot.php';
 

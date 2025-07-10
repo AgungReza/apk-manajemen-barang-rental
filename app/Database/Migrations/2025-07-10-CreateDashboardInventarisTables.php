@@ -10,14 +10,14 @@ class CreateDashboardInventarisTables extends Migration
     {
         // Tabel users
         $this->forge->addField([
-            'user_id'      => ['type' => 'VARCHAR', 'constraint' => 50],
-            'first_name'   => ['type' => 'VARCHAR', 'constraint' => 100],
-            'last_name'    => ['type' => 'VARCHAR', 'constraint' => 100],
-            'email'        => ['type' => 'VARCHAR', 'constraint' => 255],
-            'password'     => ['type' => 'VARCHAR', 'constraint' => 255],
-            'created_at'   => ['type' => 'DATETIME', 'null' => true],
-            'updated_at'   => ['type' => 'DATETIME', 'null' => true],
-            'role'         => ['type' => 'INT', 'constraint' => 10, 'default' => 2],
+            'user_id'    => ['type' => 'VARCHAR', 'constraint' => 50],
+            'first_name' => ['type' => 'VARCHAR', 'constraint' => 100],
+            'last_name'  => ['type' => 'VARCHAR', 'constraint' => 100],
+            'email'      => ['type' => 'VARCHAR', 'constraint' => 255],
+            'password'   => ['type' => 'VARCHAR', 'constraint' => 255],
+            'created_at' => ['type' => 'DATETIME', 'null' => true],
+            'updated_at' => ['type' => 'DATETIME', 'null' => true],
+            'role'       => ['type' => 'INT', 'constraint' => 10, 'default' => 2],
         ]);
         $this->forge->addKey('user_id', true);
         $this->forge->addUniqueKey('email');
@@ -51,7 +51,7 @@ class CreateDashboardInventarisTables extends Migration
             'kategori_alat'      => ['type' => 'VARCHAR', 'constraint' => 50],
             'merek'              => ['type' => 'VARCHAR', 'constraint' => 50, 'null' => true],
             'spesifikasi'        => ['type' => 'TEXT', 'null' => true],
-            'tahun_pengadaan'    => ['type' => 'YEAR', 'null' => true],
+            'tahun_pengadaan'    => ['type' => 'VARCHAR', 'constraint' => 4, 'null' => true],
             'sumber_anggaran'    => ['type' => 'VARCHAR', 'constraint' => 100, 'null' => true],
             'lokasi_penyimpanan' => ['type' => 'TEXT', 'null' => true],
             'kondisi'            => ['type' => 'VARCHAR', 'constraint' => 50, 'null' => true],
@@ -63,7 +63,7 @@ class CreateDashboardInventarisTables extends Migration
             'status'             => ['type' => 'INT', 'constraint' => 10, 'null' => true],
         ]);
         $this->forge->addKey('barang_id', true);
-        $this->forge->addForeignKey('user_id', 'users', 'user_id', 'NO ACTION', 'NO ACTION');
+        $this->forge->addForeignKey('user_id', 'users', 'user_id', '', '', 'fk_barang_user');
         $this->forge->createTable('tb_barang');
 
         // Tabel tb_transaksi
@@ -78,10 +78,13 @@ class CreateDashboardInventarisTables extends Migration
             'catatan'          => ['type' => 'TEXT', 'null' => true],
             'customer_id'      => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
             'user_id'          => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
+            'durasi_sewa'      => ['type' => 'INT', 'constraint' => 10, 'default' => 1],
+            'diskon'           => ['type' => 'INT', 'constraint' => 10, 'default' => 0],
+            'total_harga'      => ['type' => 'INT', 'constraint' => 10, 'default' => 0],
         ]);
         $this->forge->addKey('transaksi_id', true);
-        $this->forge->addForeignKey('customer_id', 'customer', 'customer_id', 'NO ACTION', 'NO ACTION');
-        $this->forge->addForeignKey('user_id', 'users', 'user_id', 'NO ACTION', 'NO ACTION');
+        $this->forge->addForeignKey('customer_id', 'customer', 'customer_id', '', '', 'fk_transaksi_customer');
+        $this->forge->addForeignKey('user_id', 'users', 'user_id', '', '', 'fk_transaksi_user');
         $this->forge->createTable('tb_transaksi');
 
         // Tabel tb_detail_transaksi
@@ -91,10 +94,11 @@ class CreateDashboardInventarisTables extends Migration
             'barang_id'     => ['type' => 'VARCHAR', 'constraint' => 50, 'null' => true],
             'jumlah'        => ['type' => 'INT', 'constraint' => 10, 'null' => true],
             'spesifikasi'   => ['type' => 'TEXT', 'null' => true],
+            'harga'         => ['type' => 'INT', 'constraint' => 10, 'default' => 0],
         ]);
         $this->forge->addKey('id_detail', true);
-        $this->forge->addForeignKey('transaksi_id', 'tb_transaksi', 'transaksi_id', 'NO ACTION', 'NO ACTION');
-        $this->forge->addForeignKey('barang_id', 'tb_barang', 'barang_id', 'NO ACTION', 'NO ACTION');
+        $this->forge->addForeignKey('transaksi_id', 'tb_transaksi', 'transaksi_id', '', '', 'fk_detail_transaksi');
+        $this->forge->addForeignKey('barang_id', 'tb_barang', 'barang_id', '', '', 'fk_detail_barang');
         $this->forge->createTable('tb_detail_transaksi');
     }
 

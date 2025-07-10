@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:  # 👉 ini supaya bisa dijalankan manual dari GitHub UI
 
 jobs:
   build:
@@ -25,24 +26,29 @@ jobs:
           --health-retries=3
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.1'
-        extensions: mbstring, intl, mysqli
-        coverage: none
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'  # Sesuaikan dengan versi lokal
+          extensions: mbstring, intl, mysqli
+          coverage: xdebug
 
-    - name: Install Composer Dependencies
-      run: composer install --no-interaction --prefer-dist
+      - name: Install Composer Dependencies
+        run: composer install --no-interaction --prefer-dist
 
-    - name: Copy .env.testing to .env
-      run: cp .env.testing .env
+      - name: Copy .env.testing ke .env (fallback ke .env jika tidak ada)
+        run: |
+          if [ -f .env.testing ]; then
+            cp .env.testing .env
+          else
+            cp env .env
+          fi
 
-    - name: Run Database Migration
-      run: php spark migrate --all --quiet
+      - name: Jalankan Migrasi Database
+        run: php spark migrate --all --quiet
 
-    - name: Run PHPUnit Tests
-      run: vendor/bin/phpunit
+      - name: Jalankan PHPUnit (dengan coverage)
+        run: vendor/bin/phpunit --coverage-text --colors=always

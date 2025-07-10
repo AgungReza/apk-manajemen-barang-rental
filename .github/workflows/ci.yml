@@ -2,10 +2,10 @@ name: CI CodeIgniter 4
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
-  workflow_dispatch:  # 👉 ini supaya bisa dijalankan manual dari GitHub UI
+    branches: [main]
+  workflow_dispatch: # bisa dijalankan manual dari GitHub UI
 
 jobs:
   build:
@@ -32,14 +32,17 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'  # Sesuaikan dengan versi lokal
+          php-version: "8.2" # sesuaikan jika di lokal pakai versi lain
           extensions: mbstring, intl, mysqli
           coverage: xdebug
 
-      - name: Install Composer Dependencies
-        run: composer install --no-interaction --prefer-dist
+      - name: Update Composer Dependencies (fix autoload)
+        run: composer update --no-interaction
 
-      - name: Copy .env.testing ke .env (fallback ke .env jika tidak ada)
+      - name: Set Spark Executable Permission
+        run: chmod +x spark
+
+      - name: Copy .env.testing ke .env (fallback ke env jika tidak ada)
         run: |
           if [ -f .env.testing ]; then
             cp .env.testing .env

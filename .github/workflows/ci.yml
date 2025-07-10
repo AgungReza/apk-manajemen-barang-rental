@@ -2,7 +2,7 @@ name: CI CodeIgniter 4
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
     branches: [ main ]
   workflow_dispatch:  # 👉 ini supaya bisa dijalankan manual dari GitHub UI
@@ -28,7 +28,32 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          extensions: mbstring, intl, mysqli
+          coverage: xdebug
+
+      - name: Update Composer Dependencies (fix autoload)
+        run: composer update --no-interaction
+
+      - name: Set Spark Executable Permission (Linux fix)
+        run: chmod +x spark
+
+      - name: Copy .env.testing ke .env
+        run: |
+          if [ -f .env.testing ]; then
+            cp .env.testing .env
+          else
+            cp env .env
+          fi
+
+      - name: Jalankan Migrasi Database
+        run: php spark migrate --all --quiet
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -50,5 +75,7 @@ jobs:
       - name: Jalankan Migrasi Database
         run: php spark migrate --all --quiet
 
+      - name: Jalankan PHPUnit dengan coverage
+        run: vendor/bin/phpunit --coverage-text --colors=always
       - name: Jalankan PHPUnit (dengan coverage)
         run: vendor/bin/phpunit --coverage-text --colors=always

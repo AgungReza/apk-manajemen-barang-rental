@@ -1,26 +1,32 @@
-name: Auto Deploy to Proxmox VM
+name: Deploy ke Server Lokal
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   deploy:
-    runs-on: self-hosted
-
+    runs-on: self-hosted  # ⬅️ Ganti ke self-hosted (bisa juga tambahkan nama runner jika mau spesifik)
     steps:
-    - name: Checkout Source
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Deploy locally
-      run: |
-        echo "🚀 Deployment started"
-        cd /var/www/html
-        if [ ! -d ".git" ]; then
-          sudo rm -rf ./*
-          git clone https://github.com/AgungReza/apk-manajemen-barang-rental.git .
-        else
-          git pull origin main
-        fi
-        sudo chown -R www-data:www-data .
-        echo "✅ Deployment complete"
+      - name: Jalankan SSH Deployment
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: 192.168.1.16
+          username: agung
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            echo "🚀 Deployment started"
+            cd /var/www/html
+            if [ ! -d ".git" ]; then
+              sudo rm -rf ./*
+              git clone https://github.com/AgungReza/apk-manajemen-barang-rental.git .
+            else
+              git pull origin main
+            fi
+            sudo chown -R www-data:www-data .
+            echo "✅ Deployment complete"

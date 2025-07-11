@@ -2,7 +2,7 @@ name: Auto Deploy ke Proxmox atau Railway
 
 on:
   push:
-    branches: [main]   # Workflow otomatis dijalankan saat push ke branch `main`
+    branches: [master]   # Workflow otomatis dijalankan saat push ke branch `main`
   workflow_dispatch:   # Bisa dijalankan manual via tombol dan input pilihan
 
 jobs:

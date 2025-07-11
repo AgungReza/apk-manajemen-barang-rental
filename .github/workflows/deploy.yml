@@ -1,11 +1,5 @@
-name: Auto Deploy to Proxmox VM
 
-on:
-  push:
-    branches: [main]
 
-jobs:
-  deploy:
     name: Deploy ke Server Proxmox
     runs-on: [self-hosted, AGUNGPORTO]
 

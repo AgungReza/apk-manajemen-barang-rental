@@ -1,5 +1,12 @@
+name: Auto Deploy to Proxmox VM
 
+on:
+  push:
+    branches: [main]   # ⬅️ Otomatis jalan saat kamu push ke branch `main`
+  workflow_dispatch:   # ⬅️ Opsional: bisa dijalankan manual via tombol
 
+jobs:
+  deploy:
     name: Deploy ke Server Proxmox
     runs-on: [self-hosted, AGUNGPORTO]
 

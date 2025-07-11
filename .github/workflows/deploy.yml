@@ -1,32 +1,38 @@
-name: Deploy ke Server Lokal
 
-on:
-  push:
-    branches:
-      - main
 
-jobs:
-  deploy:
-    runs-on: self-hosted  # ⬅️ Ganti ke self-hosted (bisa juga tambahkan nama runner jika mau spesifik)
+    name: Deploy ke Server Proxmox
+    runs-on: [self-hosted, AGUNGPORTO]
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: 🔄 Checkout Source Code
+        uses: actions/checkout@v3
 
-      - name: Jalankan SSH Deployment
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: 192.168.1.16
-          username: agung
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
-            echo "🚀 Deployment started"
-            cd /var/www/html
-            if [ ! -d ".git" ]; then
-              sudo rm -rf ./*
-              git clone https://github.com/AgungReza/apk-manajemen-barang-rental.git .
-            else
-              git pull origin main
-            fi
-            sudo chown -R www-data:www-data .
-            echo "✅ Deployment complete"
+      - name: 🚀 Jalankan Proses Deployment
+        shell: bash
+        run: |
+          echo "🚀 Memulai deployment pada: $(date)"
+          echo "📁 Navigasi ke folder: /var/www/html"
+
+          cd /var/www/html || {
+            echo "❌ Gagal masuk ke direktori /var/www/html"; exit 1;
+          }
+
+          if [ ! -d ".git" ]; then
+            echo "🔄 Folder belum terinisialisasi Git. Mengkloning repository..."
+            sudo rm -rf ./*
+            git clone https://github.com/AgungReza/apk-manajemen-barang-rental.git .
+          else
+            echo "📥 Pull update terbaru dari branch main..."
+            git reset --hard
+            git pull origin main
+          fi
+
+          echo "🔐 Mengatur izin akses untuk www-data..."
+          sudo chown -R www-data:www-data .
+
+          echo "✅ Deployment selesai pada: $(date)"
+
+      - name: 🧪 Verifikasi File Utama Terkini
+        run: |
+          echo "📄 5 file terbaru:"
+          ls -lt /var/www/html | head -n 6

@@ -6,21 +6,39 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    name: Deploy ke Server Proxmox
+    runs-on: [self-hosted, AGUNGPORTO]
 
     steps:
-    - name: Checkout Source
-      uses: actions/checkout@v3
+      - name: 🔄 Checkout Source Code
+        uses: actions/checkout@v3
 
-    - name: Deploy locally
-      run: |
-        echo "🚀 Deployment started"
-        cd /var/www/html
-        if [ ! -d ".git" ]; then
-          sudo rm -rf ./*
-          git clone https://github.com/AgungReza/apk-manajemen-barang-rental.git .
-        else
-          git pull origin main
-        fi
-        sudo chown -R www-data:www-data .
-        echo "✅ Deployment complete"
+      - name: 🚀 Jalankan Proses Deployment
+        shell: bash
+        run: |
+          echo "🚀 Memulai deployment pada: $(date)"
+          echo "📁 Navigasi ke folder: /var/www/html"
+
+          cd /var/www/html || {
+            echo "❌ Gagal masuk ke direktori /var/www/html"; exit 1;
+          }
+
+          if [ ! -d ".git" ]; then
+            echo "🔄 Folder belum terinisialisasi Git. Mengkloning repository..."
+            sudo rm -rf ./*
+            git clone https://github.com/AgungReza/apk-manajemen-barang-rental.git .
+          else
+            echo "📥 Pull update terbaru dari branch main..."
+            git reset --hard
+            git pull origin main
+          fi
+
+          echo "🔐 Mengatur izin akses untuk www-data..."
+          sudo chown -R www-data:www-data .
+
+          echo "✅ Deployment selesai pada: $(date)"
+
+      - name: 🧪 Verifikasi File Utama Terkini
+        run: |
+          echo "📄 5 file terbaru:"
+          ls -lt /var/www/html | head -n 6

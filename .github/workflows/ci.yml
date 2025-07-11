@@ -1,0 +1,57 @@
+name: CI CodeIgniter 4
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: # bisa dijalankan manual dari GitHub UI
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: ci_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2" # sesuaikan jika di lokal pakai versi lain
+          extensions: mbstring, intl, mysqli
+          coverage: xdebug
+
+      - name: Update Composer Dependencies (fix autoload)
+        run: composer update --no-interaction
+
+      - name: Set Spark Executable Permission
+        run: chmod +x spark
+
+      - name: Copy .env.testing ke .env (fallback ke env jika tidak ada)
+        run: |
+          if [ -f .env.testing ]; then
+            cp .env.testing .env
+          else
+            cp env .env
+          fi
+
+      - name: Jalankan Migrasi Database
+        run: php spark migrate --all --quiet
+
+      - name: Jalankan PHPUnit (dengan coverage)
+        run: vendor/bin/phpunit --coverage-text --colors=always

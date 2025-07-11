@@ -6,19 +6,20 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-bottom: 24px; /* Memberikan jarak bawah */
+        margin-bottom: 24px; 
+        margin-top: 24px;
     }
 
     .logo-image {
-        height: 150px; /* Tinggi logo */
-        width: auto; /* Lebar otomatis untuk menjaga proporsi */
-        object-fit: contain; /* Memastikan gambar tidak terpotong */
+        height: 100px; 
+        width: auto; 
+        object-fit: contain; 
     }
 </style>
 
 <!-- Logo -->
 <div class="logo-container">
-    <img src="/img/logo.png" alt="Logo" class="logo-image">
+    <img src="/img/lp.png" alt="Logo" class="logo-image">
 </div>
 
 

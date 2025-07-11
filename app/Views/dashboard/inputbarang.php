@@ -12,19 +12,16 @@ Form Input Barang
             <form action="/barang/save" method="post">
                 <?= csrf_field(); ?>
 
+                <!-- ID Barang (readonly) -->
+                <div class="mb-4">
+                    <label for="barang_id" class="block text-sm font-medium text-gray-700">ID Barang</label>
+                    <input type="text" id="barang_id" name="barang_id" value="<?= esc($barang_id) ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-100 text-gray-600 cursor-not-allowed sm:text-sm" readonly>
+                </div>
+
                 <!-- Nama Barang -->
                 <div class="mb-4">
                     <label for="nama_barang" class="block text-sm font-medium text-gray-700">Nama Barang</label>
                     <input type="text" id="nama_barang" name="nama_barang" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
-                </div>
-
-                <!-- Jenis Barang -->
-                <div class="mb-4">
-                    <label for="kategori_alat" class="block text-sm font-medium text-gray-700">Jenis Barang</label>
-                    <select id="kategori_alat" name="kategori_alat" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
-                        <option value="habis_pakai">Habis Pakai</option>
-                        <option value="tidak_habis_pakai">Tidak Habis Pakai</option>
-                    </select>
                 </div>
 
                 <!-- Merk -->
@@ -39,34 +36,18 @@ Form Input Barang
                     <textarea id="spesifikasi" name="spesifikasi" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></textarea>
                 </div>
 
-                <!-- Tahun Pengadaan -->
+                <!-- Harga -->
                 <div class="mb-4">
-                    <label for="tahun_pengadaan" class="block text-sm font-medium text-gray-700">Tahun Pengadaan</label>
-                    <input type="number" id="tahun_pengadaan" name="tahun_pengadaan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <label for="harga" class="block text-sm font-medium text-gray-700">Harga (Rp)</label>
+                    <input type="number" id="harga" name="harga" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                    <p class="text-xs text-gray-500 mt-1">Masukkan angka tanpa titik atau koma, contoh: 100000</p>
                 </div>
 
-                <!-- Sumber Anggaran -->
-                <div class="mb-4">
-                    <label for="sumber_anggaran" class="block text-sm font-medium text-gray-700">Sumber Anggaran</label>
-                    <input type="text" id="sumber_anggaran" name="sumber_anggaran" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                </div>
-
-                <!-- Lokasi Simpan -->
-                <div class="mb-4">
-                    <label for="lokasi_penyimpanan" class="block text-sm font-medium text-gray-700">Lokasi Simpan</label>
-                    <input type="text" id="lokasi_penyimpanan" name="lokasi_penyimpanan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                </div>
 
                 <!-- Kondisi -->
                 <div class="mb-4">
                     <label for="kondisi" class="block text-sm font-medium text-gray-700">Kondisi</label>
                     <input type="text" id="kondisi" name="kondisi" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                </div>
-
-                <!-- Jumlah Stok -->
-                <div class="mb-4">
-                    <label for="jumlah_stok" class="block text-sm font-medium text-gray-700">Jumlah Stok</label>
-                    <input type="number" id="jumlah_stok" name="jumlah_stok" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                 </div>
 
                 <!-- Catatan -->

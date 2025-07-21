@@ -1,84 +1,31 @@
-name: Auto Deploy ke Proxmox atau Railway
+name: Deploy ke Railway
 
 on:
   push:
-    branches: [main]   # Workflow otomatis dijalankan saat push ke branch `main`
-  workflow_dispatch:   # Bisa dijalankan manual via tombol dan input pilihan
+    branches: [main]    # Otomatis saat push ke main
+  workflow_dispatch:    # Dapat dijalankan manual
 
 jobs:
-  deploy_proxmox:
-    name: Deploy ke Proxmox
-    runs-on: [self-hosted, AGUNGPORTO]  # Gunakan server yang di-host oleh Anda untuk Proxmox
-    if: ${{ github.event.inputs.deploy_to == 'proxmox' }}  # Memeriksa input deploy_to yang memilih Proxmox
-
-    steps:
-      - name: 🔄 Checkout Source Code
-        uses: actions/checkout@v3
-
-      - name: 🚀 Jalankan Proses Deployment ke Proxmox
-        shell: bash
-        run: |
-          echo "🚀 Memulai deployment pada: $(date)"
-          echo "📁 Navigasi ke folder: /var/www/html"
-
-          cd /var/www/html || {
-            echo "❌ Gagal masuk ke direktori /var/www/html"; exit 1;
-          }
-
-          if [ ! -d ".git" ]; then
-            echo "🔄 Folder belum terinisialisasi Git. Mengkloning repository..."
-            sudo rm -rf ./*
-            git clone https://github.com/AgungReza/apk-manajemen-barang-rental.git .
-          else
-            echo "📥 Pull update terbaru dari branch main..."
-            git reset --hard
-            git pull origin main
-          fi
-
-          echo "🔐 Mengatur izin akses untuk www-data..."
-          sudo chown -R www-data:www-data .
-
-          echo "✅ Deployment selesai pada: $(date)"
-
-      - name: 🧪 Verifikasi File Utama Terkini
-        run: |
-          echo "📄 5 file terbaru:"
-          ls -lt /var/www/html | head -n 6
-
   deploy_railway:
     name: Deploy ke Railway
-    runs-on: ubuntu-latest  # Gunakan runner Ubuntu yang disediakan oleh GitHub untuk Railway
-    if: ${{ github.event.inputs.deploy_to == 'railway' }}  # Memeriksa input deploy_to yang memilih Railway
+    runs-on: ubuntu-latest
 
     steps:
       - name: 🔄 Checkout Source Code
         uses: actions/checkout@v3
 
-      - name: 🚀 Jalankan Proses Deployment ke Railway
-        shell: bash
+      - name: 🛠 Install Railway CLI
+        run: npm install -g railway
+
+      - name: 🔐 Login Railway (via token)
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway login --token $RAILWAY_TOKEN
+
+      - name: 🚀 Deploy ke Railway
         run: |
-          echo "🚀 Memulai deployment pada: $(date)"
-          echo "📁 Navigasi ke direktori aplikasi Railway"
+          echo "🚀 Deploying ke Railway pada: $(date)"
+          railway up
 
-          if [ ! -d ".git" ]; then
-            echo "🔄 Folder belum terinisialisasi Git. Mengkloning repository..."
-            git clone https://github.com/AgungReza/apk-manajemen-barang-rental.git .
-          else
-            echo "📥 Pull update terbaru dari branch main..."
-            git reset --hard
-            git pull origin main
-          fi
-
-          echo "🔐 Menjalankan build untuk Railway..."
-          # Misalnya, install dependencies jika diperlukan
-          # npm install (untuk Node.js)
-          # bundle install (untuk Ruby)
-          # pip install -r requirements.txt (untuk Python)
-
-          echo "✅ Deployment selesai pada: $(date)"
-
-      - name: 🧪 Verifikasi File Utama Terkini
-        run: |
-          echo "📄 5 file terbaru:"
-          ls -lt | head -n 6
-
+      - name: 🧪 Verifikasi Deploy
+        run: echo "✅ Berhasil deploy ke Railway!"
